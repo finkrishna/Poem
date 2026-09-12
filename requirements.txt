@@ -1,0 +1,2 @@
+# Gradio, spaces, and huggingface_hub are preinstalled on Spaces — do not pin them.
+# The factory uses the Python standard library only.

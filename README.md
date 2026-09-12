@@ -3,8 +3,12 @@ title: Poem Reader
 emoji: 📜
 colorFrom: green
 colorTo: yellow
-sdk: docker
-app_port: 7860
+sdk: gradio
+sdk_version: 6.27.0
+app_file: app.py
+python_version: "3.12"
+startup_duration_timeout: 30m
+short_description: Drop a poem, get a bilingual spoken reader
 pinned: false
 ---
 
@@ -45,8 +49,8 @@ GitHub Pages can serve the **library HTML** statically. It cannot run the factor
 
 Use a **Docker** host that keeps a process running and lets requests take a couple of minutes (Grok is slow on a long shloka):
 
-1. **[Hugging Face Spaces](https://huggingface.co/new-space)** — Docker SDK, port **7860**. Walkthrough below.
-2. **[Render](https://render.com)** — New Web Service from this repo, Docker runtime. This repo includes `render.yaml`. Set `XAI_API_KEY` in the dashboard.
+1. **Hugging Face Spaces** — free personal accounts cannot host Docker/CPU apps. This repo ships a **Gradio + ZeroGPU** factory (`app.py`) so it can run on a free account without burning GPU quota (Grok runs on CPU).
+2. **[Render](https://render.com)** — Docker web service if you want the original HTML factory (`Dockerfile` + `render.yaml`). Set `XAI_API_KEY` in the dashboard.
 
 Both: set a **spend cap** (you mentioned $5) at [console.x.ai](https://console.x.ai). The factory also caps **10 readers per visitor per hour** (`MAX_PER_HOUR`) and only builds **one reader at a time**.
 
