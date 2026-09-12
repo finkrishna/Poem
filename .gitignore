@@ -1,0 +1,5 @@
+.DS_Store
+*.swp
+.pm_loop_state
+PM_TO_*.md
+*_TO_PM.md
