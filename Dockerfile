@@ -1,7 +1,9 @@
 FROM python:3.12-slim
 RUN useradd -m -u 1000 user
 WORKDIR /app
-COPY --chown=user:user . .
+COPY --chown=user:user factory_server.py factory.js reader.js reader.css index.html README.md ./
+COPY --chown=user:user bhaja-govindam.html bhaja-govindam.json shravan-masi.html shravan-masi-spoken.html ./
+COPY --chown=user:user audio ./audio
 ENV HOST=0.0.0.0
 ENV PORT=7860
 ENV PYTHONUNBUFFERED=1

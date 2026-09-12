@@ -320,7 +320,7 @@ async function boot() {
     );
     if (hint && info.has_key) {
       hint.textContent =
-        "This host has a SpaceXAI key. Translation uses Grok (often 1–2 minutes). Speech uses voices on your device. The operator should cap spend at console.x.ai.";
+        "This host builds the reader with Kimi K2 (usually 10–20 seconds). Speech uses voices on your device. Gloss is unverified.";
     }
   } else {
     $("key-wrap").hidden = false;

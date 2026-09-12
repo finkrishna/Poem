@@ -3,11 +3,9 @@ title: Poem Reader
 emoji: 📜
 colorFrom: green
 colorTo: yellow
-sdk: gradio
-sdk_version: 6.27.0
-app_file: app.py
-python_version: "3.12"
-startup_duration_timeout: 30m
+sdk: docker
+app_port: 7860
+fullWidth: true
 short_description: Drop a poem, get a bilingual spoken reader
 pinned: false
 ---
@@ -49,8 +47,8 @@ GitHub Pages can serve the **library HTML** statically. It cannot run the factor
 
 Use a **Docker** host that keeps a process running and lets requests take a couple of minutes (Grok is slow on a long shloka):
 
-1. **Hugging Face Spaces** — Gradio. Inference is **Kimi K2** via Hugging Face Inference Providers (Novita), chosen for gloss quality not price. Set Space secret `HF_TOKEN`. Optional fallback: `XAI_API_KEY`.
-2. **[Render](https://render.com)** — Docker web service for the original HTML factory (`Dockerfile` + `render.yaml`).
+1. **Hugging Face Spaces** — **Docker** serving the same HTML factory as local (`index.html` + `factory_server.py`). Inference is **Kimi K2** via Hugging Face Inference. Space secrets: `HF_TOKEN`, optional `XAI_API_KEY`.
+2. **[Render](https://render.com)** — same Docker image (`render.yaml`).
 
 Both: set a **spend cap** (you mentioned $5) at [console.x.ai](https://console.x.ai). The factory also caps **10 readers per visitor per hour** (`MAX_PER_HOUR`) and only builds **one reader at a time**.
 
