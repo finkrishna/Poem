@@ -1,3 +1,13 @@
+---
+title: Poem Reader
+emoji: 📜
+colorFrom: green
+colorTo: yellow
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Poem Reader
 
 A bilingual poem / shloka reader. Paste text or a URL, get a two-column page: original on the left (hover a word to hear it and see a gloss), translation on the right.
@@ -35,7 +45,7 @@ GitHub Pages can serve the **library HTML** statically. It cannot run the factor
 
 Use a **Docker** host that keeps a process running and lets requests take a couple of minutes (Grok is slow on a long shloka):
 
-1. **[Hugging Face Spaces](https://huggingface.co/new-space)** — Docker SDK, port **7860**. Good for sharing an AI hobby app. Add a Space secret `XAI_API_KEY`.
+1. **[Hugging Face Spaces](https://huggingface.co/new-space)** — Docker SDK, port **7860**. Walkthrough below.
 2. **[Render](https://render.com)** — New Web Service from this repo, Docker runtime. This repo includes `render.yaml`. Set `XAI_API_KEY` in the dashboard.
 
 Both: set a **spend cap** (you mentioned $5) at [console.x.ai](https://console.x.ai). The factory also caps **10 readers per visitor per hour** (`MAX_PER_HOUR`) and only builds **one reader at a time**.
@@ -46,6 +56,45 @@ The key stays on the server. Friends should not need to paste a key. `.env` is g
 docker build -t poem-reader .
 docker run --rm -p 7860:7860 -e XAI_API_KEY=xai-... poem-reader
 ```
+
+### Hugging Face Spaces, step by step
+
+Do this **after** a spend cap is set at [console.x.ai](https://console.x.ai).
+
+1. Make an account at [huggingface.co](https://huggingface.co/join) if you do not have one.
+2. Open **[New Space](https://huggingface.co/new-space)**.
+3. Fill in:
+   - **Space name:** `poem-reader` (or anything)
+   - **License:** MIT is fine
+   - **SDK:** **Docker** (not Gradio, not Streamlit, not Static)
+   - **Hardware:** CPU basic (free)
+   - **Visibility:** Public (friends need no Hugging Face login). Private Spaces usually need a paid plan.
+4. Click **Create Space**. You get an empty Space repo. Leave the tab open.
+5. Add the API key: Space page → **Settings** → **Variables and secrets** → **New secret**
+   - Name: `XAI_API_KEY` (exact spelling)
+   - Value: your `xai-…` key  
+   Runtime secrets become environment variables. The factory reads that name. Do **not** put the key in a public Variable, only in a Secret.
+6. Push this GitHub repo into the Space (from your laptop, in the Poem folder):
+
+```bash
+# one-time: Hugging Face write token from https://huggingface.co/settings/tokens
+git remote add spaces https://huggingface.co/spaces/YOUR_HF_USERNAME/poem-reader
+git push spaces main
+```
+
+Use the Space name you actually created. The first push takes a few minutes while Docker builds.
+
+7. Space page → **App** (or **Logs** if it is still building). When it is up, the URL is:
+
+`https://huggingface.co/spaces/YOUR_HF_USERNAME/poem-reader`
+
+Friends can use the factory there. They should **not** see a key box if the secret loaded (`/api/health` will show `"has_key": true`).
+
+**If the App is blank or “port not ready”:** Logs should show `Poem factory http://0.0.0.0:7860/`. Hardware must be Docker + port 7860 (already set in this README’s header and in the Dockerfile).
+
+**Sleep:** free CPU Spaces nap after idle time. The first visit after a nap is slow; that is normal.
+
+**Later updates:** `git push origin main` (GitHub) and `git push spaces main` (Hugging Face), unless you later hook the two together.
 
 ## Voice menu
 
