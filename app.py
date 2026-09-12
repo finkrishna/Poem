@@ -94,7 +94,7 @@ with gr.Blocks(
         """# Drop a text. Get a reader.
 Any language in · any language out.
 
-Translation and word glosses use **Qwen 2.5 72B** on Hugging Face Inference (usually ~15–40 seconds). Speech uses **voices already on your device**. Gloss is unverified."""
+Translation and word glosses use **Kimi K2** on Hugging Face Inference (usually ~10–20 seconds). Speech uses **voices already on your device**. Gloss is unverified."""
     )
     text = gr.Textbox(label="Text", lines=8, placeholder=EXAMPLE)
     url = gr.Textbox(label="Or a URL", placeholder="https://vignanam.org/devanagari/sri-rudram-namakam.html")

@@ -30,8 +30,10 @@ MAX_PER_HOUR = int(os.environ.get("MAX_PER_HOUR", "10"))
 XAI_URL = "https://api.x.ai/v1/chat/completions"
 XAI_MODEL = os.environ.get("XAI_MODEL", "grok-4.5")
 HF_URL = "https://router.huggingface.co/v1/chat/completions"
-# Novita hosts Qwen 2.5 72B cheaply; :fastest often hits Groq/Together Cloudflare 403s.
-HF_MODEL = os.environ.get("HF_MODEL", "Qwen/Qwen2.5-72B-Instruct:novita")
+# Quality first: Kimi K2 (literary glosses), then DeepSeek V3.2.
+# Pin Novita — :fastest often 403s on Groq/Together.
+HF_MODEL = os.environ.get("HF_MODEL", "moonshotai/Kimi-K2-Instruct:novita")
+HF_FALLBACK_MODEL = os.environ.get("HF_FALLBACK_MODEL", "deepseek-ai/DeepSeek-V3.2:novita")
 HIDDEN_FILES = {".env", ".git", ".gitignore", ".dockerignore"}
 FETCH_UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -287,26 +289,30 @@ def call_llm(text: str, target_label: str, target_code: str, api_key: str = "") 
     ]
     errors: list[str] = []
     token = hf_token()
+    hf_models = [HF_MODEL]
+    if HF_FALLBACK_MODEL and HF_FALLBACK_MODEL not in hf_models:
+        hf_models.append(HF_FALLBACK_MODEL)
     if token:
-        try:
-            print(f"llm: Hugging Face {HF_MODEL}", flush=True)
-            payload = _chat_completions(
-                HF_URL,
-                token,
-                {
-                    "model": HF_MODEL,
-                    "temperature": 0.2,
-                    "max_tokens": 8192,
-                    "messages": messages,
-                },
-                timeout=90,
-                label="HuggingFace",
-            )
-            content = (payload.get("choices") or [{}])[0].get("message", {}).get("content") or ""
-            return extract_json(content)
-        except Exception as e:
-            errors.append(str(e))
-            print(f"hf failed, trying SpaceXAI: {e}", flush=True)
+        for model in hf_models:
+            try:
+                print(f"llm: Hugging Face {model}", flush=True)
+                payload = _chat_completions(
+                    HF_URL,
+                    token,
+                    {
+                        "model": model,
+                        "temperature": 0.2,
+                        "max_tokens": 8192,
+                        "messages": messages,
+                    },
+                    timeout=90,
+                    label="HuggingFace",
+                )
+                content = (payload.get("choices") or [{}])[0].get("message", {}).get("content") or ""
+                return extract_json(content)
+            except Exception as e:
+                errors.append(str(e))
+                print(f"hf {model} failed: {e}", flush=True)
 
     xai_key = (os.environ.get("XAI_API_KEY") or api_key or "").strip()
     if xai_key:
@@ -314,22 +320,15 @@ def call_llm(text: str, target_label: str, target_code: str, api_key: str = "") 
             "model": XAI_MODEL,
             "temperature": 0.2,
             "max_tokens": 8192,
-            "search_parameters": {"mode": "off"},
             "messages": messages,
         }
         try:
             print(f"llm: SpaceXAI {XAI_MODEL}", flush=True)
             payload = _chat_completions(XAI_URL, xai_key, body, timeout=180, label="SpaceXAI")
-        except RuntimeError as e:
-            if "search_parameters" not in str(e).lower():
-                errors.append(str(e))
-                payload = None
-            else:
-                body.pop("search_parameters", None)
-                payload = _chat_completions(XAI_URL, xai_key, body, timeout=180, label="SpaceXAI")
-        if payload is not None:
             content = (payload.get("choices") or [{}])[0].get("message", {}).get("content") or ""
             return extract_json(content)
+        except Exception as e:
+            errors.append(str(e))
 
     raise RuntimeError(
         "No working LLM. Set HF_TOKEN (Hugging Face Inference) or XAI_API_KEY. "

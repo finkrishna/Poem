@@ -25,7 +25,7 @@ Hobby project. Translations are model-generated and **not** scholar-reviewed.
 | **Factory** (`index.html`) | Drop text, a file, or a URL. Grok detects the language, glosses words, writes a translation. |
 | **Library** | Finished pages: [श्रावण मासी](shravan-masi-spoken.html) (Marathi) and [भज गोविन्दम्](bhaja-govindam.html) (Sanskrit, first 20 verses). |
 | **Speech** | Factory readers use **voices already on your device** (browser Web Speech). Pick one in the Voice menu. Library poems also have recorded mp3s. |
-| **Translation** | Hugging Face Inference **Qwen 2.5 72B** (`Qwen/Qwen2.5-72B-Instruct:novita`). First ~2,000 tokens. Usually 15–40 seconds. SpaceXAI Grok is the fallback. |
+| **Translation** | Hugging Face Inference **Kimi K2** (`moonshotai/Kimi-K2-Instruct:novita`), then DeepSeek V3.2, then SpaceXAI Grok. First ~2,000 tokens. Usually 10–20 seconds. |
 
 There is no Sanskrit vidwan or ghanapāṭha engine here. A Hindi or Indian-English system voice is usually the closest the browser has.
 
@@ -49,7 +49,7 @@ GitHub Pages can serve the **library HTML** statically. It cannot run the factor
 
 Use a **Docker** host that keeps a process running and lets requests take a couple of minutes (Grok is slow on a long shloka):
 
-1. **Hugging Face Spaces** — Gradio on **CPU Basic** (Pro). Inference is **Qwen 2.5 72B** via Hugging Face Inference Providers (Novita). Set Space secret `HF_TOKEN`. Optional fallback: `XAI_API_KEY`.
+1. **Hugging Face Spaces** — Gradio. Inference is **Kimi K2** via Hugging Face Inference Providers (Novita), chosen for gloss quality not price. Set Space secret `HF_TOKEN`. Optional fallback: `XAI_API_KEY`.
 2. **[Render](https://render.com)** — Docker web service for the original HTML factory (`Dockerfile` + `render.yaml`).
 
 Both: set a **spend cap** (you mentioned $5) at [console.x.ai](https://console.x.ai). The factory also caps **10 readers per visitor per hour** (`MAX_PER_HOUR`) and only builds **one reader at a time**.
