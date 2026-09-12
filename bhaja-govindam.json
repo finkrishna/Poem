@@ -1,0 +1,244 @@
+{
+  "id": "bhaja-govindam",
+  "title_sa": "भज गोविन्दम्",
+  "title_en": "Worship Govinda",
+  "subtitle": "Moha Mudgara — first 20 verses",
+  "eyebrow": "Sanskrit · 20 verses",
+  "poet": "आदि शङ्कराचार्य · Ādi Śaṅkara",
+  "poet_note": "with verses of the disciples after the first twelve",
+  "intro": "Shankara’s hammer of delusion: seek Govinda, not grammar, wealth, or the body. The first twelve verses are his; a colophon follows, then verses of the disciples. This page is the first twenty of the usual recension. The refrain भज गोविन्दं is sung after each verse; here it stands as verse 1.",
+  "lang": "sa",
+  "lang_label": "Sanskrit",
+  "audio_dir": "audio/bhaja-govindam",
+  "source": "Vaidika Vignanam Devanagari recension (verses 1–20).",
+  "stanzas": [
+    {
+      "n": 1,
+      "sa": [
+        [["भज", "worship / seek"], ["गोविन्दं", "Govinda (Krishna)"], ["भज", "worship / seek"], ["गोविन्दं", "Govinda"], ["गोविन्दं", "Govinda"], ["भज", "worship"], ["मूढमते", "O foolish mind"]],
+        [["सम्प्राप्ते", "when it has arrived"], ["सन्निहिते", "when it is close at hand"], ["काले", "at the time (of death)"], ["नहि", "not"], ["नहि", "not (emphatic)"], ["रक्षति", "saves / protects"], ["डुकृङ्करणे", "grammar (Pāṇini’s ḍukṛñ)"]]
+      ],
+      "en": [
+        "Worship Govinda, worship Govinda, O deluded mind.",
+        "When the hour of death is upon you, the rules of grammar will not save you."
+      ],
+      "note": "The story: Shankara meets an aged scholar in Varanasi drilling Pāṇini. डुकृङ्करणे is a technical grammar formula, standing here for mere book-learning."
+    },
+    {
+      "n": 2,
+      "sa": [
+        [["मूढ", "O fool"], ["जहीहि", "give up"], ["धनागमतृष्णां", "thirst to amass wealth"], ["कुरु", "make / cultivate"], ["सद्बुद्धिं", "right understanding"], ["मनसि", "in the mind"], ["वितृष्णाम्", "freedom from craving"]],
+        [["यल्लभसे", "whatever you obtain"], ["निजकर्मोपात्तं", "earned by your own past deeds"], ["वित्तं", "wealth"], ["तेन", "with that"], ["विनोदय", "gladden / content"], ["चित्तम्", "the mind"]]
+      ],
+      "en": [
+        "O fool, give up the thirst to pile up wealth; set the mind on wisdom and on freedom from craving.",
+        "Whatever comes through your own past work — with that, content the heart."
+      ]
+    },
+    {
+      "n": 3,
+      "sa": [
+        [["नारीस्तनभर", "a woman’s full breasts"], ["नाभीदेशं", "the region of the navel"], ["दृष्ट्वा", "having seen"], ["मा", "do not"], ["गा", "go / fall"], ["मोहावेशम्", "into the grip of delusion"]],
+        [["एतन्मांसवसादिविकारं", "this is a modification of flesh, fat, and the like"], ["मनसि", "in the mind"], ["विचिन्तय", "reflect"], ["वारं", "again"], ["वारम्", "and again"]]
+      ],
+      "en": [
+        "Seeing a woman’s breasts and navel, do not fall into the spell of delusion.",
+        "Think again and again: this is only a change of flesh and fat."
+      ]
+    },
+    {
+      "n": 4,
+      "sa": [
+        [["नलिनीदल", "a lotus petal"], ["गतजलमतितरलं", "water upon it, utterly unsteady"], ["तद्वज्जीवितमतिशय", "just so is life, exceedingly"], ["चपलम्", "fickle / restless"]],
+        [["विद्धि", "know"], ["व्याध्यभिमानग्रस्तं", "seized by disease and by pride"], ["लोकं", "the world"], ["शोकहतं", "struck down by grief"], ["च", "and"], ["समस्तम्", "the whole of it"]]
+      ],
+      "en": [
+        "Water on a lotus leaf trembles and will not stay; life in this world is just as restless.",
+        "Know the whole world as seized by sickness and pride, and struck by sorrow."
+      ]
+    },
+    {
+      "n": 5,
+      "sa": [
+        [["यावद्वित्तोपार्जनसक्तः", "so long as one is busy earning wealth"], ["तावन्निजपरिवारो", "so long one’s own family"], ["रक्तः", "is attached / affectionate"]],
+        [["पश्चाज्जीवति", "afterwards, when one lives on"], ["जर्जरदेहे", "in a worn-out body"], ["वार्तां", "news / a word"], ["कोऽपि", "no one at all"], ["न", "not"], ["पृच्छति", "asks"], ["गेहे", "in the house"]]
+      ],
+      "en": [
+        "While a man can still earn, the household gathers round him with affection.",
+        "When the body is worn out, no one at home even asks how he is."
+      ]
+    },
+    {
+      "n": 6,
+      "sa": [
+        [["यावत्पवनो", "so long as the breath"], ["निवसति", "dwells"], ["देहे", "in the body"], ["तावत्पृच्छति", "so long they ask"], ["कुशलं", "welfare"], ["गेहे", "in the house"]],
+        [["गतवति", "when it has gone"], ["वायौ", "the vital air"], ["देहापाये", "at the body’s end"], ["भार्या", "the wife"], ["बिभ्यति", "is afraid"], ["तस्मिन्काये", "of that very body"]]
+      ],
+      "en": [
+        "While breath still lives in the body, the household asks after one’s welfare.",
+        "When the breath has gone, even the wife shrinks from the corpse."
+      ]
+    },
+    {
+      "n": 7,
+      "sa": [
+        [["बालस्तावत्क्रीडासक्तः", "the child is absorbed in play"], ["तरुणस्तावत्तरुणीसक्तः", "the youth is absorbed in a young woman"]],
+        [["वृद्धस्तावच्चिन्तासक्तः", "the old man is absorbed in worry"], ["परमे", "in the Supreme"], ["ब्रह्मणि", "Brahman"], ["कोऽपि", "hardly anyone"], ["न", "not"], ["सक्तः", "is attached"]]
+      ],
+      "en": [
+        "Childhood is lost in play; youth is lost in the beloved.",
+        "Old age is lost in worry. Almost no one is lost in the Supreme Brahman."
+      ]
+    },
+    {
+      "n": 8,
+      "sa": [
+        [["का", "who"], ["ते", "your"], ["कान्ता", "wife / beloved"], ["कस्ते", "who is your"], ["पुत्रः", "son"], ["संसारोऽयमतीव", "this saṃsāra is exceedingly"], ["विचित्रः", "strange"]],
+        [["कस्य", "whose"], ["त्वं", "are you"], ["कः", "who"], ["कुत", "from where"], ["आयातः", "have you come"], ["तत्त्वं", "the truth of this"], ["चिन्तय", "ponder"], ["तदिह", "that, here"], ["भ्रातः", "O brother"]]
+      ],
+      "en": [
+        "Who is your wife? Who is your son? This round of birth and death is a strange play.",
+        "Whose are you? Who are you? From where have you come? Brother, think on that here."
+      ]
+    },
+    {
+      "n": 9,
+      "sa": [
+        [["सत्सङ्गत्वे", "from the company of the good"], ["निस्सङ्गत्वं", "non-attachment"], ["निस्सङ्गत्वे", "from non-attachment"], ["निर्मोहत्वम्", "freedom from delusion"]],
+        [["निर्मोहत्वे", "from freedom from delusion"], ["निश्चलतत्त्वं", "a still, steady truth"], ["निश्चलतत्त्वे", "from that steadiness"], ["जीवन्मुक्तिः", "liberation while still alive"]]
+      ],
+      "en": [
+        "Good company gives rise to non-attachment; non-attachment, to freedom from delusion.",
+        "That freedom becomes a still truth — and from that stillness, liberation in this very life."
+      ],
+      "note": "A chain of cause: satsaṅga → nissaṅgatva → nirmoha → niścala-tattva → jīvanmukti."
+    },
+    {
+      "n": 10,
+      "sa": [
+        [["वयसि", "when youth"], ["गते", "has gone"], ["कः", "what"], ["कामविकारः", "surge of desire"], ["शुष्के", "when dried"], ["नीरे", "the water"], ["कः", "what"], ["कासारः", "lake"]],
+        [["क्षीणे", "when dwindled"], ["वित्ते", "wealth"], ["कः", "what"], ["परिवारः", "family"], ["ज्ञाते", "when known"], ["तत्त्वे", "the Truth"], ["कः", "what"], ["संसारः", "saṃsāra"]]
+      ],
+      "en": [
+        "When youth is gone, what is lust? When the water is gone, what is a lake?",
+        "When wealth is gone, what is family? When Truth is known, what is saṃsāra?"
+      ]
+    },
+    {
+      "n": 11,
+      "sa": [
+        [["मा", "do not"], ["कुरु", "make"], ["धन", "wealth"], ["जन", "people / following"], ["यौवन", "youth"], ["गर्वं", "pride"], ["हरति", "steals away"], ["निमेषात्कालः", "Time, in the blink of an eye"], ["सर्वम्", "everything"]],
+        [["मायामयमिदमखिलं", "this entire (world) is made of māyā"], ["हित्वा", "having left behind"], ["ब्रह्मपदं", "the state of Brahman"], ["त्वं", "you"], ["प्रविश", "enter"], ["विदित्वा", "having known it"]]
+      ],
+      "en": [
+        "Do not take pride in wealth, in people, or in youth: Time steals them in a blink.",
+        "Leave this world of māyā; know the state of Brahman, and enter it."
+      ]
+    },
+    {
+      "n": 12,
+      "sa": [
+        [["दिनयामिन्यौ", "day and night"], ["सायं", "evening"], ["प्रातः", "morning"], ["शिशिरवसन्तौ", "winter and spring"], ["पुनरायातः", "come again"]],
+        [["कालः", "Time"], ["क्रीडति", "plays"], ["गच्छत्यायुः", "life goes"], ["तदपि", "even then"], ["न", "not"], ["मुञ्चत्याशावायुः", "does one let go the gale of desire"]]
+      ],
+      "en": [
+        "Day and night, evening and morning, winter and spring return again.",
+        "Time plays, life runs out — and still one does not drop the storm of wanting."
+      ]
+    },
+    {
+      "n": 13,
+      "sa": [
+        [["का", "what"], ["ते", "your"], ["कान्ता", "beloved"], ["धनगतचिन्ता", "anxiety over wealth"], ["वातुल", "O madman"], ["किं", "is there"], ["तव", "for you"], ["नास्ति", "not"], ["नियन्ता", "a guide / master"]],
+        [["त्रिजगति", "in the three worlds"], ["सज्जनसङ्गतिरेका", "the company of the good, alone"], ["भवति", "becomes"], ["भवार्णवतरणे", "for crossing the ocean of becoming"], ["नौका", "the boat"]]
+      ],
+      "en": [
+        "Why this worry over beloved and wealth, O madman? Have you no one to steer you?",
+        "In all three worlds, only the company of the good is the boat across the ocean of birth and death."
+      ]
+    },
+    {
+      "n": 14,
+      "sa": [
+        [["द्वादश", "twelve"], ["मञ्जरिकाभिरशेषः", "by these flower-clusters, completely"], ["कथितो", "has been told"], ["वैयाकरणस्यैषः", "this, for the grammarian"]],
+        [["उपदेशोऽभूद्विद्या", "this teaching was given, by those skilled in knowledge"], ["निपुणैः", "the adept"], ["श्रीमच्छङ्कर", "by the blessed Śaṅkara"], ["भगवच्छरणैः", "whose refuge is the Lord"]]
+      ],
+      "en": [
+        "In these twelve flower-clusters the whole counsel has been spoken to the grammarian.",
+        "The teaching came from the blessed Śaṅkara, master of knowledge, whose refuge is the Lord."
+      ],
+      "note": "Colophon of the first twelve verses (the dvādaśa-mañjarikā), Shankara’s own. The verses that follow are traditionally those of his disciples."
+    },
+    {
+      "n": 15,
+      "sa": [
+        [["जटिलो", "one with matted hair"], ["मुण्डी", "one with a shaven head"], ["लुञ्छितकेशः", "one whose hair is plucked"], ["काषायाम्बर", "ochre robes"], ["बहुकृतवेषः", "many costumes put on"]],
+        [["पश्यन्नपि", "though seeing"], ["च", "and"], ["न", "not"], ["पश्यति", "sees"], ["मूढः", "the fool"], ["उदरनिमित्तं", "for the sake of the belly"], ["बहुकृतवेषः", "many disguises are worn"]]
+      ],
+      "en": [
+        "Matted hair, shaven head, plucked hair, ochre cloth — so many costumes.",
+        "The fool looks and still does not see: these disguises are for the belly’s sake."
+      ],
+      "note": "Traditionally attributed to Padmapāda."
+    },
+    {
+      "n": 16,
+      "sa": [
+        [["अङ्गं", "the body"], ["गलितं", "has wasted"], ["पलितं", "grey / faded"], ["मुण्डं", "the head"], ["दशनविहीनं", "without teeth"], ["जातं", "has become"], ["तुण्डम्", "the mouth"]],
+        [["वृद्धो", "the old man"], ["याति", "goes"], ["गृहीत्वा", "having taken"], ["दण्डं", "a staff"], ["तदपि", "even then"], ["न", "not"], ["मुञ्चत्याशापिण्डम्", "does he let go the lump of hope"]]
+      ],
+      "en": [
+        "The body is wasted, the head grey, the mouth without teeth.",
+        "The old man walks with a staff — and still he will not drop the lump of hope."
+      ],
+      "note": "Traditionally attributed to Toṭakācārya."
+    },
+    {
+      "n": 17,
+      "sa": [
+        [["अग्रे", "in front"], ["वह्निः", "fire"], ["पृष्ठे", "at the back"], ["भानुः", "the sun"], ["रात्रौ", "at night"], ["चुबुक", "the chin"], ["समर्पित", "placed upon"], ["जानुः", "the knees"]],
+        [["करतल", "in the palm"], ["भिक्षस्तरुतलवासः", "alms, and dwelling under a tree"], ["तदपि", "even then"], ["न", "not"], ["मुञ्चत्याशापाशः", "does he let go the noose of desire"]]
+      ],
+      "en": [
+        "Fire in front, sun at the back; at night the chin is tucked on the knees.",
+        "Alms in the palm, a tree for a house — and still the noose of desire is not cut."
+      ],
+      "note": "Traditionally attributed to Hastāmalaka."
+    },
+    {
+      "n": 18,
+      "sa": [
+        [["कुरुते", "one performs"], ["गङ्गासागरगमनं", "a pilgrimage to the Ganga’s mouth"], ["व्रत", "vows"], ["परिपालनमथवा", "keeping them, or else"], ["दानम्", "gifts"]],
+        [["ज्ञानविहीनः", "without knowledge"], ["सर्वमतेन", "in every school of thought"], ["भजति", "attains"], ["न", "not"], ["मुक्तिं", "liberation"], ["जन्मशतेन", "in a hundred births"]]
+      ],
+      "en": [
+        "One may go to Gaṅgā-sāgara, keep vows, or give gifts.",
+        "Without knowledge, say all the schools, liberation does not come in a hundred births."
+      ]
+    },
+    {
+      "n": 19,
+      "sa": [
+        [["सुरमन्दिर", "a temple of the gods"], ["तरु", "a tree"], ["मूल", "at the root"], ["निवासः", "dwelling"], ["शय्या", "bed"], ["भूतलमजिनं", "the bare earth, and a deerskin"], ["वासः", "garment"]],
+        [["सर्व", "all"], ["परिग्रह", "possessions"], ["भोगत्यागः", "and the giving-up of enjoyments"], ["कस्य", "for whom"], ["सुखं", "happiness"], ["न", "not"], ["करोति", "does make"], ["विरागः", "dispassion"]]
+      ],
+      "en": [
+        "A dwelling at a temple tree, the earth for a bed, a deerskin for cloth.",
+        "Giving up every possession and pleasure — whom does dispassion not make glad?"
+      ],
+      "note": "Traditionally attributed to Sureśvara."
+    },
+    {
+      "n": 20,
+      "sa": [
+        [["योगरतो", "devoted to yoga"], ["वा", "or"], ["भोगरतो", "devoted to enjoyment"], ["वा", "or"], ["सङ्गरतो", "devoted to company"], ["वा", "or"], ["सङ्गविहीनः", "without company"]],
+        [["यस्य", "whose"], ["ब्रह्मणि", "in Brahman"], ["रमते", "delights"], ["चित्तं", "mind"], ["नन्दति", "rejoices"], ["नन्दति", "rejoices"], ["नन्दत्येव", "rejoices indeed"]]
+      ],
+      "en": [
+        "Whether given to yoga or to pleasure, to company or to solitude —",
+        "the one whose mind delights in Brahman rejoices, rejoices, rejoices indeed."
+      ],
+      "note": "Traditionally attributed to Nityānanda. The hymn continues beyond this verse in the usual 31-verse recension."
+    }
+  ]
+}

@@ -1,0 +1,374 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Worship Govinda · Poem Reader</title><style>
+
+:root{color-scheme:light;--lh:44px;--paper:#f7f5ee;--ink:#263d34;--muted:#73796c;--line:#d9ddcf;--accent:#a65a34}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,sans-serif}a{color:inherit;text-underline-offset:4px}header,main,footer{max-width:1480px;margin:auto;padding:0 5vw}nav{display:flex;justify-content:space-between;align-items:center;padding:23px 0;border-bottom:1px solid var(--line)}.brand{font-family:Georgia,serif;font-size:24px;text-decoration:none}.small,.eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase}.eyebrow{color:var(--accent);margin:36px 0 12px}h1{font-family:serif;font-size:clamp(38px,5vw,66px);font-weight:500;line-height:1.3;margin:0}h2.subtitle{font:italic 25px Georgia,serif;margin:8px 0 17px}.byline{font-size:14px}.intro{max-width:670px;color:#657165;margin:18px 0 24px}.toolbar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:26px 0}.howto{margin-right:auto;color:var(--muted);font-size:13px;max-width:640px}.howto ol{margin:4px 0 0;padding-left:20px}.howto strong{color:var(--ink);font-weight:600}.narrow-only{display:none}button,select{font:inherit;color:var(--ink);border:1px solid #c6ccbd;background:transparent;border-radius:5px;padding:6px 11px;cursor:pointer}button:hover,button[aria-pressed=true]{background:#e4e9dc}.columns,.stanza{display:grid;grid-template-columns:1fr 1fr}.columns{position:sticky;top:0;z-index:2;background:var(--paper);border-top:1px solid var(--ink);border-bottom:1px solid var(--line)}.columns div{padding:17px 22px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}.columns small{display:block;text-transform:none;letter-spacing:0;color:var(--muted);margin-top:2px}.stanza{border-bottom:1px solid var(--line);scroll-margin-top:90px}.pane{padding:28px 22px 30px;min-width:0;display:grid;grid-template-rows:subgrid;grid-row:span var(--rows)}.pane+.pane{border-left:1px solid var(--line)}.original{font-family:serif;font-size:22px;line-height:var(--lh)}.number{display:block;font:11px system-ui;color:var(--accent);margin-bottom:16px;letter-spacing:.12em;text-decoration:none}.verse{margin:0 0 13px}.rendition{font:21px/var(--lh) Georgia,serif}button.poem-word{font:inherit;color:inherit;line-height:inherit;padding:0 2px;margin:0 -2px;border:0;border-radius:3px;background:transparent;text-decoration:underline dotted #acb8a4;text-underline-offset:6px;touch-action:manipulation}button.poem-word:hover,button.poem-word.active{background:#e1e7d6}button.poem-word:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.meaning-popup{position:fixed;z-index:10;max-width:min(320px,calc(100vw - 24px));padding:13px 17px;background:#263d34;color:#fffdf5;box-shadow:0 6px 24px #263d3433;border-radius:8px;font:16px/1.5 system-ui;overflow-wrap:anywhere}.meaning-popup[hidden]{display:none}.hover-hint{display:none}@media(hover:hover) and (pointer:fine){.hover-hint{display:inline}.touch-hint{display:none}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+details{grid-column:1/-1;background:#eef0e7;padding:9px 22px;font-size:13px}summary{cursor:pointer;color:#637052}details p{max-width:850px;margin:8px 0}.mobile-label{display:none}.large{--lh:52px}.large .original{font-size:26px}.large .rendition{font-size:25px}footer{padding-top:35px;padding-bottom:45px;font-size:12px;color:#72796b}footer p{max-width:850px}.library{display:block;padding:24px 0;border-bottom:1px solid var(--line);text-decoration:none}.library strong{font:28px serif}.library span{display:block;color:var(--muted)}@media(max-width:800px){.wide-only{display:none}.narrow-only{display:inline}header,main,footer{padding-left:22px;padding-right:22px}.columns{display:none}.stanza{grid-template-columns:1fr}.pane{padding:22px 0;display:block;grid-row:auto}.spacer{display:none}.pane+.pane{border-left:0;border-top:1px dashed var(--line)}.mobile-label{display:block;font:10px system-ui;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:12px}.original{font-size:23px}.number{margin-bottom:10px}details{margin-bottom:18px}.small{font-size:9px}}
+.listen{font:11px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:5px;line-height:1.2;flex:none}
+.listen[aria-pressed=true]{background:#263d34;color:#f7f5ee;border-color:#263d34}
+.stanza-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.stanza-head .number{margin-bottom:0}
+.stanza.playing{background:#eef2e4}
+#play-full{min-width:6.6rem}
+@media print{.listen,#play-full,#speak-words{display:none!important}.stanza.playing{background:transparent}}
+@media(max-width:800px){.stanza-head{margin-bottom:10px}}
+@media print{.toolbar,nav,details{display:none}.columns{position:static}.stanza{break-inside:avoid}.pane{padding:15px}.meaning-popup{display:none!important}button.poem-word{text-decoration:none}body{background:white}}
+
+</style></head><body><header><nav><a class="brand" href="index.html">Poem Reader</a><span class="small"><a href="index.html">All poems</a></span></nav>
+<p class="eyebrow">Sanskrit · 20 verses</p>
+<h1 lang="sa">भज गोविन्दम्</h1>
+<h2 class="subtitle">Worship Govinda</h2>
+<div class="byline">आदि शङ्कराचार्य · Ādi Śaṅkara &nbsp; <span style="color:var(--muted)">with verses of the disciples after the first twelve</span></div>
+<p class="intro">Shankara’s hammer of delusion: seek Govinda, not grammar, wealth, or the body. The first twelve verses are his; a colophon follows, then verses of the disciples. This page is the first twenty of the usual recension. The refrain भज गोविन्दं is sung after each verse; here it stands as verse 1.</p>
+<div class="toolbar"><div class="howto"><strong>How to read</strong>
+<ol>
+<li>Try to read the original Sanskrit first<span class="wide-only"> (left column)</span><span class="narrow-only"> (the first text in each stanza)</span>.</li>
+<li><span class="hover-hint">Hover over, or tab to,</span><span class="touch-hint">Tap</span> any word you don’t understand to hear it spoken and see its meaning in English.<span class="touch-hint"> Tap anywhere else to close it.</span></li>
+<li>For really difficult lines, read the English version of the whole line <span class="wide-only">in the right column</span><span class="narrow-only">in the English after the stanza</span>.</li>
+</ol></div>
+<button type="button" id="play-full" class="listen" data-src="audio/bhaja-govindam/full.mp3" aria-pressed="false">Play hymn</button>
+<button id="size" aria-pressed="false">Larger text</button>
+<button type="button" id="speak-words" aria-pressed="true">Speak words</button>
+<button onclick="window.print()">Print</button></div></header>
+<main>
+<div class="columns"><div>Original<small>Sanskrit</small></div><div>English<small>AI generated translation</small></div></div>
+<section class="stanza" id="stanza-1" style="--rows:3" aria-label="Verse 1">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-1" aria-label="Verse 1">01</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-01.mp3" aria-label="Play verse 1" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="worship / seek" data-speak-src="audio/bhaja-govindam/words/w001.mp3">भज</button> <button type="button" class="poem-word" data-meaning="Govinda (Krishna)" data-speak-src="audio/bhaja-govindam/words/w002.mp3">गोविन्दं</button> <button type="button" class="poem-word" data-meaning="worship / seek" data-speak-src="audio/bhaja-govindam/words/w001.mp3">भज</button> <button type="button" class="poem-word" data-meaning="Govinda" data-speak-src="audio/bhaja-govindam/words/w002.mp3">गोविन्दं</button> <button type="button" class="poem-word" data-meaning="Govinda" data-speak-src="audio/bhaja-govindam/words/w002.mp3">गोविन्दं</button> <button type="button" class="poem-word" data-meaning="worship" data-speak-src="audio/bhaja-govindam/words/w001.mp3">भज</button> <button type="button" class="poem-word" data-meaning="O foolish mind" data-speak-src="audio/bhaja-govindam/words/w003.mp3">मूढमते</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="when it has arrived" data-speak-src="audio/bhaja-govindam/words/w004.mp3">सम्प्राप्ते</button> <button type="button" class="poem-word" data-meaning="when it is close at hand" data-speak-src="audio/bhaja-govindam/words/w005.mp3">सन्निहिते</button> <button type="button" class="poem-word" data-meaning="at the time (of death)" data-speak-src="audio/bhaja-govindam/words/w006.mp3">काले</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w007.mp3">नहि</button> <button type="button" class="poem-word" data-meaning="not (emphatic)" data-speak-src="audio/bhaja-govindam/words/w007.mp3">नहि</button> <button type="button" class="poem-word" data-meaning="saves / protects" data-speak-src="audio/bhaja-govindam/words/w008.mp3">रक्षति</button> <button type="button" class="poem-word" data-meaning="grammar (Pāṇini’s ḍukṛñ)" data-speak-src="audio/bhaja-govindam/words/w009.mp3">डुकृङ्करणे</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Worship Govinda, worship Govinda, O deluded mind.</p><p class="verse">When the hour of death is upon you, the rules of grammar will not save you.</p></div>
+<details><summary>Note</summary><p>The story: Shankara meets an aged scholar in Varanasi drilling Pāṇini. डुकृङ्करणे is a technical grammar formula, standing here for mere book-learning.</p></details></section>
+<section class="stanza" id="stanza-2" style="--rows:3" aria-label="Verse 2">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-2" aria-label="Verse 2">02</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-02.mp3" aria-label="Play verse 2" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="O fool" data-speak-src="audio/bhaja-govindam/words/w010.mp3">मूढ</button> <button type="button" class="poem-word" data-meaning="give up" data-speak-src="audio/bhaja-govindam/words/w011.mp3">जहीहि</button> <button type="button" class="poem-word" data-meaning="thirst to amass wealth" data-speak-src="audio/bhaja-govindam/words/w012.mp3">धनागमतृष्णां</button> <button type="button" class="poem-word" data-meaning="make / cultivate" data-speak-src="audio/bhaja-govindam/words/w013.mp3">कुरु</button> <button type="button" class="poem-word" data-meaning="right understanding" data-speak-src="audio/bhaja-govindam/words/w014.mp3">सद्बुद्धिं</button> <button type="button" class="poem-word" data-meaning="in the mind" data-speak-src="audio/bhaja-govindam/words/w015.mp3">मनसि</button> <button type="button" class="poem-word" data-meaning="freedom from craving" data-speak-src="audio/bhaja-govindam/words/w016.mp3">वितृष्णाम्</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="whatever you obtain" data-speak-src="audio/bhaja-govindam/words/w017.mp3">यल्लभसे</button> <button type="button" class="poem-word" data-meaning="earned by your own past deeds" data-speak-src="audio/bhaja-govindam/words/w018.mp3">निजकर्मोपात्तं</button> <button type="button" class="poem-word" data-meaning="wealth" data-speak-src="audio/bhaja-govindam/words/w019.mp3">वित्तं</button> <button type="button" class="poem-word" data-meaning="with that" data-speak-src="audio/bhaja-govindam/words/w020.mp3">तेन</button> <button type="button" class="poem-word" data-meaning="gladden / content" data-speak-src="audio/bhaja-govindam/words/w021.mp3">विनोदय</button> <button type="button" class="poem-word" data-meaning="the mind" data-speak-src="audio/bhaja-govindam/words/w022.mp3">चित्तम्</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">O fool, give up the thirst to pile up wealth; set the mind on wisdom and on freedom from craving.</p><p class="verse">Whatever comes through your own past work — with that, content the heart.</p></div>
+</section>
+<section class="stanza" id="stanza-3" style="--rows:3" aria-label="Verse 3">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-3" aria-label="Verse 3">03</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-03.mp3" aria-label="Play verse 3" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="a woman’s full breasts" data-speak-src="audio/bhaja-govindam/words/w023.mp3">नारीस्तनभर</button> <button type="button" class="poem-word" data-meaning="the region of the navel" data-speak-src="audio/bhaja-govindam/words/w024.mp3">नाभीदेशं</button> <button type="button" class="poem-word" data-meaning="having seen" data-speak-src="audio/bhaja-govindam/words/w025.mp3">दृष्ट्वा</button> <button type="button" class="poem-word" data-meaning="do not" data-speak-src="audio/bhaja-govindam/words/w026.mp3">मा</button> <button type="button" class="poem-word" data-meaning="go / fall" data-speak-src="audio/bhaja-govindam/words/w027.mp3">गा</button> <button type="button" class="poem-word" data-meaning="into the grip of delusion" data-speak-src="audio/bhaja-govindam/words/w028.mp3">मोहावेशम्</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="this is a modification of flesh, fat, and the like" data-speak-src="audio/bhaja-govindam/words/w029.mp3">एतन्मांसवसादिविकारं</button> <button type="button" class="poem-word" data-meaning="in the mind" data-speak-src="audio/bhaja-govindam/words/w015.mp3">मनसि</button> <button type="button" class="poem-word" data-meaning="reflect" data-speak-src="audio/bhaja-govindam/words/w030.mp3">विचिन्तय</button> <button type="button" class="poem-word" data-meaning="again" data-speak-src="audio/bhaja-govindam/words/w031.mp3">वारं</button> <button type="button" class="poem-word" data-meaning="and again" data-speak-src="audio/bhaja-govindam/words/w032.mp3">वारम्</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Seeing a woman’s breasts and navel, do not fall into the spell of delusion.</p><p class="verse">Think again and again: this is only a change of flesh and fat.</p></div>
+</section>
+<section class="stanza" id="stanza-4" style="--rows:3" aria-label="Verse 4">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-4" aria-label="Verse 4">04</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-04.mp3" aria-label="Play verse 4" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="a lotus petal" data-speak-src="audio/bhaja-govindam/words/w033.mp3">नलिनीदल</button> <button type="button" class="poem-word" data-meaning="water upon it, utterly unsteady" data-speak-src="audio/bhaja-govindam/words/w034.mp3">गतजलमतितरलं</button> <button type="button" class="poem-word" data-meaning="just so is life, exceedingly" data-speak-src="audio/bhaja-govindam/words/w035.mp3">तद्वज्जीवितमतिशय</button> <button type="button" class="poem-word" data-meaning="fickle / restless" data-speak-src="audio/bhaja-govindam/words/w036.mp3">चपलम्</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="know" data-speak-src="audio/bhaja-govindam/words/w037.mp3">विद्धि</button> <button type="button" class="poem-word" data-meaning="seized by disease and by pride" data-speak-src="audio/bhaja-govindam/words/w038.mp3">व्याध्यभिमानग्रस्तं</button> <button type="button" class="poem-word" data-meaning="the world" data-speak-src="audio/bhaja-govindam/words/w039.mp3">लोकं</button> <button type="button" class="poem-word" data-meaning="struck down by grief" data-speak-src="audio/bhaja-govindam/words/w040.mp3">शोकहतं</button> <button type="button" class="poem-word" data-meaning="and" data-speak-src="audio/bhaja-govindam/words/w041.mp3">च</button> <button type="button" class="poem-word" data-meaning="the whole of it" data-speak-src="audio/bhaja-govindam/words/w042.mp3">समस्तम्</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Water on a lotus leaf trembles and will not stay; life in this world is just as restless.</p><p class="verse">Know the whole world as seized by sickness and pride, and struck by sorrow.</p></div>
+</section>
+<section class="stanza" id="stanza-5" style="--rows:3" aria-label="Verse 5">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-5" aria-label="Verse 5">05</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-05.mp3" aria-label="Play verse 5" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="so long as one is busy earning wealth" data-speak-src="audio/bhaja-govindam/words/w043.mp3">यावद्वित्तोपार्जनसक्तः</button> <button type="button" class="poem-word" data-meaning="so long one’s own family" data-speak-src="audio/bhaja-govindam/words/w044.mp3">तावन्निजपरिवारो</button> <button type="button" class="poem-word" data-meaning="is attached / affectionate" data-speak-src="audio/bhaja-govindam/words/w045.mp3">रक्तः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="afterwards, when one lives on" data-speak-src="audio/bhaja-govindam/words/w046.mp3">पश्चाज्जीवति</button> <button type="button" class="poem-word" data-meaning="in a worn-out body" data-speak-src="audio/bhaja-govindam/words/w047.mp3">जर्जरदेहे</button> <button type="button" class="poem-word" data-meaning="news / a word" data-speak-src="audio/bhaja-govindam/words/w048.mp3">वार्तां</button> <button type="button" class="poem-word" data-meaning="no one at all" data-speak-src="audio/bhaja-govindam/words/w049.mp3">कोऽपि</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w050.mp3">न</button> <button type="button" class="poem-word" data-meaning="asks" data-speak-src="audio/bhaja-govindam/words/w051.mp3">पृच्छति</button> <button type="button" class="poem-word" data-meaning="in the house" data-speak-src="audio/bhaja-govindam/words/w052.mp3">गेहे</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">While a man can still earn, the household gathers round him with affection.</p><p class="verse">When the body is worn out, no one at home even asks how he is.</p></div>
+</section>
+<section class="stanza" id="stanza-6" style="--rows:3" aria-label="Verse 6">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-6" aria-label="Verse 6">06</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-06.mp3" aria-label="Play verse 6" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="so long as the breath" data-speak-src="audio/bhaja-govindam/words/w053.mp3">यावत्पवनो</button> <button type="button" class="poem-word" data-meaning="dwells" data-speak-src="audio/bhaja-govindam/words/w054.mp3">निवसति</button> <button type="button" class="poem-word" data-meaning="in the body" data-speak-src="audio/bhaja-govindam/words/w055.mp3">देहे</button> <button type="button" class="poem-word" data-meaning="so long they ask" data-speak-src="audio/bhaja-govindam/words/w056.mp3">तावत्पृच्छति</button> <button type="button" class="poem-word" data-meaning="welfare" data-speak-src="audio/bhaja-govindam/words/w057.mp3">कुशलं</button> <button type="button" class="poem-word" data-meaning="in the house" data-speak-src="audio/bhaja-govindam/words/w052.mp3">गेहे</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="when it has gone" data-speak-src="audio/bhaja-govindam/words/w058.mp3">गतवति</button> <button type="button" class="poem-word" data-meaning="the vital air" data-speak-src="audio/bhaja-govindam/words/w059.mp3">वायौ</button> <button type="button" class="poem-word" data-meaning="at the body’s end" data-speak-src="audio/bhaja-govindam/words/w060.mp3">देहापाये</button> <button type="button" class="poem-word" data-meaning="the wife" data-speak-src="audio/bhaja-govindam/words/w061.mp3">भार्या</button> <button type="button" class="poem-word" data-meaning="is afraid" data-speak-src="audio/bhaja-govindam/words/w062.mp3">बिभ्यति</button> <button type="button" class="poem-word" data-meaning="of that very body" data-speak-src="audio/bhaja-govindam/words/w063.mp3">तस्मिन्काये</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">While breath still lives in the body, the household asks after one’s welfare.</p><p class="verse">When the breath has gone, even the wife shrinks from the corpse.</p></div>
+</section>
+<section class="stanza" id="stanza-7" style="--rows:3" aria-label="Verse 7">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-7" aria-label="Verse 7">07</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-07.mp3" aria-label="Play verse 7" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="the child is absorbed in play" data-speak-src="audio/bhaja-govindam/words/w064.mp3">बालस्तावत्क्रीडासक्तः</button> <button type="button" class="poem-word" data-meaning="the youth is absorbed in a young woman" data-speak-src="audio/bhaja-govindam/words/w065.mp3">तरुणस्तावत्तरुणीसक्तः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="the old man is absorbed in worry" data-speak-src="audio/bhaja-govindam/words/w066.mp3">वृद्धस्तावच्चिन्तासक्तः</button> <button type="button" class="poem-word" data-meaning="in the Supreme" data-speak-src="audio/bhaja-govindam/words/w067.mp3">परमे</button> <button type="button" class="poem-word" data-meaning="Brahman" data-speak-src="audio/bhaja-govindam/words/w068.mp3">ब्रह्मणि</button> <button type="button" class="poem-word" data-meaning="hardly anyone" data-speak-src="audio/bhaja-govindam/words/w049.mp3">कोऽपि</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w050.mp3">न</button> <button type="button" class="poem-word" data-meaning="is attached" data-speak-src="audio/bhaja-govindam/words/w069.mp3">सक्तः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Childhood is lost in play; youth is lost in the beloved.</p><p class="verse">Old age is lost in worry. Almost no one is lost in the Supreme Brahman.</p></div>
+</section>
+<section class="stanza" id="stanza-8" style="--rows:3" aria-label="Verse 8">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-8" aria-label="Verse 8">08</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-08.mp3" aria-label="Play verse 8" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="who" data-speak-src="audio/bhaja-govindam/words/w070.mp3">का</button> <button type="button" class="poem-word" data-meaning="your" data-speak-src="audio/bhaja-govindam/words/w071.mp3">ते</button> <button type="button" class="poem-word" data-meaning="wife / beloved" data-speak-src="audio/bhaja-govindam/words/w072.mp3">कान्ता</button> <button type="button" class="poem-word" data-meaning="who is your" data-speak-src="audio/bhaja-govindam/words/w073.mp3">कस्ते</button> <button type="button" class="poem-word" data-meaning="son" data-speak-src="audio/bhaja-govindam/words/w074.mp3">पुत्रः</button> <button type="button" class="poem-word" data-meaning="this saṃsāra is exceedingly" data-speak-src="audio/bhaja-govindam/words/w075.mp3">संसारोऽयमतीव</button> <button type="button" class="poem-word" data-meaning="strange" data-speak-src="audio/bhaja-govindam/words/w076.mp3">विचित्रः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="whose" data-speak-src="audio/bhaja-govindam/words/w077.mp3">कस्य</button> <button type="button" class="poem-word" data-meaning="are you" data-speak-src="audio/bhaja-govindam/words/w078.mp3">त्वं</button> <button type="button" class="poem-word" data-meaning="who" data-speak-src="audio/bhaja-govindam/words/w079.mp3">कः</button> <button type="button" class="poem-word" data-meaning="from where" data-speak-src="audio/bhaja-govindam/words/w080.mp3">कुत</button> <button type="button" class="poem-word" data-meaning="have you come" data-speak-src="audio/bhaja-govindam/words/w081.mp3">आयातः</button> <button type="button" class="poem-word" data-meaning="the truth of this" data-speak-src="audio/bhaja-govindam/words/w082.mp3">तत्त्वं</button> <button type="button" class="poem-word" data-meaning="ponder" data-speak-src="audio/bhaja-govindam/words/w083.mp3">चिन्तय</button> <button type="button" class="poem-word" data-meaning="that, here" data-speak-src="audio/bhaja-govindam/words/w084.mp3">तदिह</button> <button type="button" class="poem-word" data-meaning="O brother" data-speak-src="audio/bhaja-govindam/words/w085.mp3">भ्रातः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Who is your wife? Who is your son? This round of birth and death is a strange play.</p><p class="verse">Whose are you? Who are you? From where have you come? Brother, think on that here.</p></div>
+</section>
+<section class="stanza" id="stanza-9" style="--rows:3" aria-label="Verse 9">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-9" aria-label="Verse 9">09</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-09.mp3" aria-label="Play verse 9" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="from the company of the good" data-speak-src="audio/bhaja-govindam/words/w086.mp3">सत्सङ्गत्वे</button> <button type="button" class="poem-word" data-meaning="non-attachment" data-speak-src="audio/bhaja-govindam/words/w087.mp3">निस्सङ्गत्वं</button> <button type="button" class="poem-word" data-meaning="from non-attachment" data-speak-src="audio/bhaja-govindam/words/w088.mp3">निस्सङ्गत्वे</button> <button type="button" class="poem-word" data-meaning="freedom from delusion" data-speak-src="audio/bhaja-govindam/words/w089.mp3">निर्मोहत्वम्</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="from freedom from delusion" data-speak-src="audio/bhaja-govindam/words/w090.mp3">निर्मोहत्वे</button> <button type="button" class="poem-word" data-meaning="a still, steady truth" data-speak-src="audio/bhaja-govindam/words/w091.mp3">निश्चलतत्त्वं</button> <button type="button" class="poem-word" data-meaning="from that steadiness" data-speak-src="audio/bhaja-govindam/words/w092.mp3">निश्चलतत्त्वे</button> <button type="button" class="poem-word" data-meaning="liberation while still alive" data-speak-src="audio/bhaja-govindam/words/w093.mp3">जीवन्मुक्तिः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Good company gives rise to non-attachment; non-attachment, to freedom from delusion.</p><p class="verse">That freedom becomes a still truth — and from that stillness, liberation in this very life.</p></div>
+<details><summary>Note</summary><p>A chain of cause: satsaṅga → nissaṅgatva → nirmoha → niścala-tattva → jīvanmukti.</p></details></section>
+<section class="stanza" id="stanza-10" style="--rows:3" aria-label="Verse 10">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-10" aria-label="Verse 10">10</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-10.mp3" aria-label="Play verse 10" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="when youth" data-speak-src="audio/bhaja-govindam/words/w094.mp3">वयसि</button> <button type="button" class="poem-word" data-meaning="has gone" data-speak-src="audio/bhaja-govindam/words/w095.mp3">गते</button> <button type="button" class="poem-word" data-meaning="what" data-speak-src="audio/bhaja-govindam/words/w079.mp3">कः</button> <button type="button" class="poem-word" data-meaning="surge of desire" data-speak-src="audio/bhaja-govindam/words/w096.mp3">कामविकारः</button> <button type="button" class="poem-word" data-meaning="when dried" data-speak-src="audio/bhaja-govindam/words/w097.mp3">शुष्के</button> <button type="button" class="poem-word" data-meaning="the water" data-speak-src="audio/bhaja-govindam/words/w098.mp3">नीरे</button> <button type="button" class="poem-word" data-meaning="what" data-speak-src="audio/bhaja-govindam/words/w079.mp3">कः</button> <button type="button" class="poem-word" data-meaning="lake" data-speak-src="audio/bhaja-govindam/words/w099.mp3">कासारः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="when dwindled" data-speak-src="audio/bhaja-govindam/words/w100.mp3">क्षीणे</button> <button type="button" class="poem-word" data-meaning="wealth" data-speak-src="audio/bhaja-govindam/words/w101.mp3">वित्ते</button> <button type="button" class="poem-word" data-meaning="what" data-speak-src="audio/bhaja-govindam/words/w079.mp3">कः</button> <button type="button" class="poem-word" data-meaning="family" data-speak-src="audio/bhaja-govindam/words/w102.mp3">परिवारः</button> <button type="button" class="poem-word" data-meaning="when known" data-speak-src="audio/bhaja-govindam/words/w103.mp3">ज्ञाते</button> <button type="button" class="poem-word" data-meaning="the Truth" data-speak-src="audio/bhaja-govindam/words/w104.mp3">तत्त्वे</button> <button type="button" class="poem-word" data-meaning="what" data-speak-src="audio/bhaja-govindam/words/w079.mp3">कः</button> <button type="button" class="poem-word" data-meaning="saṃsāra" data-speak-src="audio/bhaja-govindam/words/w105.mp3">संसारः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">When youth is gone, what is lust? When the water is gone, what is a lake?</p><p class="verse">When wealth is gone, what is family? When Truth is known, what is saṃsāra?</p></div>
+</section>
+<section class="stanza" id="stanza-11" style="--rows:3" aria-label="Verse 11">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-11" aria-label="Verse 11">11</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-11.mp3" aria-label="Play verse 11" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="do not" data-speak-src="audio/bhaja-govindam/words/w026.mp3">मा</button> <button type="button" class="poem-word" data-meaning="make" data-speak-src="audio/bhaja-govindam/words/w013.mp3">कुरु</button> <button type="button" class="poem-word" data-meaning="wealth" data-speak-src="audio/bhaja-govindam/words/w106.mp3">धन</button> <button type="button" class="poem-word" data-meaning="people / following" data-speak-src="audio/bhaja-govindam/words/w107.mp3">जन</button> <button type="button" class="poem-word" data-meaning="youth" data-speak-src="audio/bhaja-govindam/words/w108.mp3">यौवन</button> <button type="button" class="poem-word" data-meaning="pride" data-speak-src="audio/bhaja-govindam/words/w109.mp3">गर्वं</button> <button type="button" class="poem-word" data-meaning="steals away" data-speak-src="audio/bhaja-govindam/words/w110.mp3">हरति</button> <button type="button" class="poem-word" data-meaning="Time, in the blink of an eye" data-speak-src="audio/bhaja-govindam/words/w111.mp3">निमेषात्कालः</button> <button type="button" class="poem-word" data-meaning="everything" data-speak-src="audio/bhaja-govindam/words/w112.mp3">सर्वम्</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="this entire (world) is made of māyā" data-speak-src="audio/bhaja-govindam/words/w113.mp3">मायामयमिदमखिलं</button> <button type="button" class="poem-word" data-meaning="having left behind" data-speak-src="audio/bhaja-govindam/words/w114.mp3">हित्वा</button> <button type="button" class="poem-word" data-meaning="the state of Brahman" data-speak-src="audio/bhaja-govindam/words/w115.mp3">ब्रह्मपदं</button> <button type="button" class="poem-word" data-meaning="you" data-speak-src="audio/bhaja-govindam/words/w078.mp3">त्वं</button> <button type="button" class="poem-word" data-meaning="enter" data-speak-src="audio/bhaja-govindam/words/w116.mp3">प्रविश</button> <button type="button" class="poem-word" data-meaning="having known it" data-speak-src="audio/bhaja-govindam/words/w117.mp3">विदित्वा</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Do not take pride in wealth, in people, or in youth: Time steals them in a blink.</p><p class="verse">Leave this world of māyā; know the state of Brahman, and enter it.</p></div>
+</section>
+<section class="stanza" id="stanza-12" style="--rows:3" aria-label="Verse 12">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-12" aria-label="Verse 12">12</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-12.mp3" aria-label="Play verse 12" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="day and night" data-speak-src="audio/bhaja-govindam/words/w118.mp3">दिनयामिन्यौ</button> <button type="button" class="poem-word" data-meaning="evening" data-speak-src="audio/bhaja-govindam/words/w119.mp3">सायं</button> <button type="button" class="poem-word" data-meaning="morning" data-speak-src="audio/bhaja-govindam/words/w120.mp3">प्रातः</button> <button type="button" class="poem-word" data-meaning="winter and spring" data-speak-src="audio/bhaja-govindam/words/w121.mp3">शिशिरवसन्तौ</button> <button type="button" class="poem-word" data-meaning="come again" data-speak-src="audio/bhaja-govindam/words/w122.mp3">पुनरायातः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="Time" data-speak-src="audio/bhaja-govindam/words/w123.mp3">कालः</button> <button type="button" class="poem-word" data-meaning="plays" data-speak-src="audio/bhaja-govindam/words/w124.mp3">क्रीडति</button> <button type="button" class="poem-word" data-meaning="life goes" data-speak-src="audio/bhaja-govindam/words/w125.mp3">गच्छत्यायुः</button> <button type="button" class="poem-word" data-meaning="even then" data-speak-src="audio/bhaja-govindam/words/w126.mp3">तदपि</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w050.mp3">न</button> <button type="button" class="poem-word" data-meaning="does one let go the gale of desire" data-speak-src="audio/bhaja-govindam/words/w127.mp3">मुञ्चत्याशावायुः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Day and night, evening and morning, winter and spring return again.</p><p class="verse">Time plays, life runs out — and still one does not drop the storm of wanting.</p></div>
+</section>
+<section class="stanza" id="stanza-13" style="--rows:3" aria-label="Verse 13">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-13" aria-label="Verse 13">13</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-13.mp3" aria-label="Play verse 13" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="what" data-speak-src="audio/bhaja-govindam/words/w070.mp3">का</button> <button type="button" class="poem-word" data-meaning="your" data-speak-src="audio/bhaja-govindam/words/w071.mp3">ते</button> <button type="button" class="poem-word" data-meaning="beloved" data-speak-src="audio/bhaja-govindam/words/w072.mp3">कान्ता</button> <button type="button" class="poem-word" data-meaning="anxiety over wealth" data-speak-src="audio/bhaja-govindam/words/w128.mp3">धनगतचिन्ता</button> <button type="button" class="poem-word" data-meaning="O madman" data-speak-src="audio/bhaja-govindam/words/w129.mp3">वातुल</button> <button type="button" class="poem-word" data-meaning="is there" data-speak-src="audio/bhaja-govindam/words/w130.mp3">किं</button> <button type="button" class="poem-word" data-meaning="for you" data-speak-src="audio/bhaja-govindam/words/w131.mp3">तव</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w132.mp3">नास्ति</button> <button type="button" class="poem-word" data-meaning="a guide / master" data-speak-src="audio/bhaja-govindam/words/w133.mp3">नियन्ता</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="in the three worlds" data-speak-src="audio/bhaja-govindam/words/w134.mp3">त्रिजगति</button> <button type="button" class="poem-word" data-meaning="the company of the good, alone" data-speak-src="audio/bhaja-govindam/words/w135.mp3">सज्जनसङ्गतिरेका</button> <button type="button" class="poem-word" data-meaning="becomes" data-speak-src="audio/bhaja-govindam/words/w136.mp3">भवति</button> <button type="button" class="poem-word" data-meaning="for crossing the ocean of becoming" data-speak-src="audio/bhaja-govindam/words/w137.mp3">भवार्णवतरणे</button> <button type="button" class="poem-word" data-meaning="the boat" data-speak-src="audio/bhaja-govindam/words/w138.mp3">नौका</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Why this worry over beloved and wealth, O madman? Have you no one to steer you?</p><p class="verse">In all three worlds, only the company of the good is the boat across the ocean of birth and death.</p></div>
+</section>
+<section class="stanza" id="stanza-14" style="--rows:3" aria-label="Verse 14">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-14" aria-label="Verse 14">14</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-14.mp3" aria-label="Play verse 14" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="twelve" data-speak-src="audio/bhaja-govindam/words/w139.mp3">द्वादश</button> <button type="button" class="poem-word" data-meaning="by these flower-clusters, completely" data-speak-src="audio/bhaja-govindam/words/w140.mp3">मञ्जरिकाभिरशेषः</button> <button type="button" class="poem-word" data-meaning="has been told" data-speak-src="audio/bhaja-govindam/words/w141.mp3">कथितो</button> <button type="button" class="poem-word" data-meaning="this, for the grammarian" data-speak-src="audio/bhaja-govindam/words/w142.mp3">वैयाकरणस्यैषः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="this teaching was given, by those skilled in knowledge" data-speak-src="audio/bhaja-govindam/words/w143.mp3">उपदेशोऽभूद्विद्या</button> <button type="button" class="poem-word" data-meaning="the adept" data-speak-src="audio/bhaja-govindam/words/w144.mp3">निपुणैः</button> <button type="button" class="poem-word" data-meaning="by the blessed Śaṅkara" data-speak-src="audio/bhaja-govindam/words/w145.mp3">श्रीमच्छङ्कर</button> <button type="button" class="poem-word" data-meaning="whose refuge is the Lord" data-speak-src="audio/bhaja-govindam/words/w146.mp3">भगवच्छरणैः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">In these twelve flower-clusters the whole counsel has been spoken to the grammarian.</p><p class="verse">The teaching came from the blessed Śaṅkara, master of knowledge, whose refuge is the Lord.</p></div>
+<details><summary>Note</summary><p>Colophon of the first twelve verses (the dvādaśa-mañjarikā), Shankara’s own. The verses that follow are traditionally those of his disciples.</p></details></section>
+<section class="stanza" id="stanza-15" style="--rows:3" aria-label="Verse 15">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-15" aria-label="Verse 15">15</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-15.mp3" aria-label="Play verse 15" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="one with matted hair" data-speak-src="audio/bhaja-govindam/words/w147.mp3">जटिलो</button> <button type="button" class="poem-word" data-meaning="one with a shaven head" data-speak-src="audio/bhaja-govindam/words/w148.mp3">मुण्डी</button> <button type="button" class="poem-word" data-meaning="one whose hair is plucked" data-speak-src="audio/bhaja-govindam/words/w149.mp3">लुञ्छितकेशः</button> <button type="button" class="poem-word" data-meaning="ochre robes" data-speak-src="audio/bhaja-govindam/words/w150.mp3">काषायाम्बर</button> <button type="button" class="poem-word" data-meaning="many costumes put on" data-speak-src="audio/bhaja-govindam/words/w151.mp3">बहुकृतवेषः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="though seeing" data-speak-src="audio/bhaja-govindam/words/w152.mp3">पश्यन्नपि</button> <button type="button" class="poem-word" data-meaning="and" data-speak-src="audio/bhaja-govindam/words/w041.mp3">च</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w050.mp3">न</button> <button type="button" class="poem-word" data-meaning="sees" data-speak-src="audio/bhaja-govindam/words/w153.mp3">पश्यति</button> <button type="button" class="poem-word" data-meaning="the fool" data-speak-src="audio/bhaja-govindam/words/w154.mp3">मूढः</button> <button type="button" class="poem-word" data-meaning="for the sake of the belly" data-speak-src="audio/bhaja-govindam/words/w155.mp3">उदरनिमित्तं</button> <button type="button" class="poem-word" data-meaning="many disguises are worn" data-speak-src="audio/bhaja-govindam/words/w151.mp3">बहुकृतवेषः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Matted hair, shaven head, plucked hair, ochre cloth — so many costumes.</p><p class="verse">The fool looks and still does not see: these disguises are for the belly’s sake.</p></div>
+<details><summary>Note</summary><p>Traditionally attributed to Padmapāda.</p></details></section>
+<section class="stanza" id="stanza-16" style="--rows:3" aria-label="Verse 16">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-16" aria-label="Verse 16">16</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-16.mp3" aria-label="Play verse 16" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="the body" data-speak-src="audio/bhaja-govindam/words/w156.mp3">अङ्गं</button> <button type="button" class="poem-word" data-meaning="has wasted" data-speak-src="audio/bhaja-govindam/words/w157.mp3">गलितं</button> <button type="button" class="poem-word" data-meaning="grey / faded" data-speak-src="audio/bhaja-govindam/words/w158.mp3">पलितं</button> <button type="button" class="poem-word" data-meaning="the head" data-speak-src="audio/bhaja-govindam/words/w159.mp3">मुण्डं</button> <button type="button" class="poem-word" data-meaning="without teeth" data-speak-src="audio/bhaja-govindam/words/w160.mp3">दशनविहीनं</button> <button type="button" class="poem-word" data-meaning="has become" data-speak-src="audio/bhaja-govindam/words/w161.mp3">जातं</button> <button type="button" class="poem-word" data-meaning="the mouth" data-speak-src="audio/bhaja-govindam/words/w162.mp3">तुण्डम्</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="the old man" data-speak-src="audio/bhaja-govindam/words/w163.mp3">वृद्धो</button> <button type="button" class="poem-word" data-meaning="goes" data-speak-src="audio/bhaja-govindam/words/w164.mp3">याति</button> <button type="button" class="poem-word" data-meaning="having taken" data-speak-src="audio/bhaja-govindam/words/w165.mp3">गृहीत्वा</button> <button type="button" class="poem-word" data-meaning="a staff" data-speak-src="audio/bhaja-govindam/words/w166.mp3">दण्डं</button> <button type="button" class="poem-word" data-meaning="even then" data-speak-src="audio/bhaja-govindam/words/w126.mp3">तदपि</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w050.mp3">न</button> <button type="button" class="poem-word" data-meaning="does he let go the lump of hope" data-speak-src="audio/bhaja-govindam/words/w167.mp3">मुञ्चत्याशापिण्डम्</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">The body is wasted, the head grey, the mouth without teeth.</p><p class="verse">The old man walks with a staff — and still he will not drop the lump of hope.</p></div>
+<details><summary>Note</summary><p>Traditionally attributed to Toṭakācārya.</p></details></section>
+<section class="stanza" id="stanza-17" style="--rows:3" aria-label="Verse 17">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-17" aria-label="Verse 17">17</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-17.mp3" aria-label="Play verse 17" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="in front" data-speak-src="audio/bhaja-govindam/words/w168.mp3">अग्रे</button> <button type="button" class="poem-word" data-meaning="fire" data-speak-src="audio/bhaja-govindam/words/w169.mp3">वह्निः</button> <button type="button" class="poem-word" data-meaning="at the back" data-speak-src="audio/bhaja-govindam/words/w170.mp3">पृष्ठे</button> <button type="button" class="poem-word" data-meaning="the sun" data-speak-src="audio/bhaja-govindam/words/w171.mp3">भानुः</button> <button type="button" class="poem-word" data-meaning="at night" data-speak-src="audio/bhaja-govindam/words/w172.mp3">रात्रौ</button> <button type="button" class="poem-word" data-meaning="the chin" data-speak-src="audio/bhaja-govindam/words/w173.mp3">चुबुक</button> <button type="button" class="poem-word" data-meaning="placed upon" data-speak-src="audio/bhaja-govindam/words/w174.mp3">समर्पित</button> <button type="button" class="poem-word" data-meaning="the knees" data-speak-src="audio/bhaja-govindam/words/w175.mp3">जानुः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="in the palm" data-speak-src="audio/bhaja-govindam/words/w176.mp3">करतल</button> <button type="button" class="poem-word" data-meaning="alms, and dwelling under a tree" data-speak-src="audio/bhaja-govindam/words/w177.mp3">भिक्षस्तरुतलवासः</button> <button type="button" class="poem-word" data-meaning="even then" data-speak-src="audio/bhaja-govindam/words/w126.mp3">तदपि</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w050.mp3">न</button> <button type="button" class="poem-word" data-meaning="does he let go the noose of desire" data-speak-src="audio/bhaja-govindam/words/w178.mp3">मुञ्चत्याशापाशः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Fire in front, sun at the back; at night the chin is tucked on the knees.</p><p class="verse">Alms in the palm, a tree for a house — and still the noose of desire is not cut.</p></div>
+<details><summary>Note</summary><p>Traditionally attributed to Hastāmalaka.</p></details></section>
+<section class="stanza" id="stanza-18" style="--rows:3" aria-label="Verse 18">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-18" aria-label="Verse 18">18</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-18.mp3" aria-label="Play verse 18" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="one performs" data-speak-src="audio/bhaja-govindam/words/w179.mp3">कुरुते</button> <button type="button" class="poem-word" data-meaning="a pilgrimage to the Ganga’s mouth" data-speak-src="audio/bhaja-govindam/words/w180.mp3">गङ्गासागरगमनं</button> <button type="button" class="poem-word" data-meaning="vows" data-speak-src="audio/bhaja-govindam/words/w181.mp3">व्रत</button> <button type="button" class="poem-word" data-meaning="keeping them, or else" data-speak-src="audio/bhaja-govindam/words/w182.mp3">परिपालनमथवा</button> <button type="button" class="poem-word" data-meaning="gifts" data-speak-src="audio/bhaja-govindam/words/w183.mp3">दानम्</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="without knowledge" data-speak-src="audio/bhaja-govindam/words/w184.mp3">ज्ञानविहीनः</button> <button type="button" class="poem-word" data-meaning="in every school of thought" data-speak-src="audio/bhaja-govindam/words/w185.mp3">सर्वमतेन</button> <button type="button" class="poem-word" data-meaning="attains" data-speak-src="audio/bhaja-govindam/words/w186.mp3">भजति</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w050.mp3">न</button> <button type="button" class="poem-word" data-meaning="liberation" data-speak-src="audio/bhaja-govindam/words/w187.mp3">मुक्तिं</button> <button type="button" class="poem-word" data-meaning="in a hundred births" data-speak-src="audio/bhaja-govindam/words/w188.mp3">जन्मशतेन</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">One may go to Gaṅgā-sāgara, keep vows, or give gifts.</p><p class="verse">Without knowledge, say all the schools, liberation does not come in a hundred births.</p></div>
+</section>
+<section class="stanza" id="stanza-19" style="--rows:3" aria-label="Verse 19">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-19" aria-label="Verse 19">19</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-19.mp3" aria-label="Play verse 19" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="a temple of the gods" data-speak-src="audio/bhaja-govindam/words/w189.mp3">सुरमन्दिर</button> <button type="button" class="poem-word" data-meaning="a tree" data-speak-src="audio/bhaja-govindam/words/w190.mp3">तरु</button> <button type="button" class="poem-word" data-meaning="at the root" data-speak-src="audio/bhaja-govindam/words/w191.mp3">मूल</button> <button type="button" class="poem-word" data-meaning="dwelling" data-speak-src="audio/bhaja-govindam/words/w192.mp3">निवासः</button> <button type="button" class="poem-word" data-meaning="bed" data-speak-src="audio/bhaja-govindam/words/w193.mp3">शय्या</button> <button type="button" class="poem-word" data-meaning="the bare earth, and a deerskin" data-speak-src="audio/bhaja-govindam/words/w194.mp3">भूतलमजिनं</button> <button type="button" class="poem-word" data-meaning="garment" data-speak-src="audio/bhaja-govindam/words/w195.mp3">वासः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="all" data-speak-src="audio/bhaja-govindam/words/w196.mp3">सर्व</button> <button type="button" class="poem-word" data-meaning="possessions" data-speak-src="audio/bhaja-govindam/words/w197.mp3">परिग्रह</button> <button type="button" class="poem-word" data-meaning="and the giving-up of enjoyments" data-speak-src="audio/bhaja-govindam/words/w198.mp3">भोगत्यागः</button> <button type="button" class="poem-word" data-meaning="for whom" data-speak-src="audio/bhaja-govindam/words/w077.mp3">कस्य</button> <button type="button" class="poem-word" data-meaning="happiness" data-speak-src="audio/bhaja-govindam/words/w199.mp3">सुखं</button> <button type="button" class="poem-word" data-meaning="not" data-speak-src="audio/bhaja-govindam/words/w050.mp3">न</button> <button type="button" class="poem-word" data-meaning="does make" data-speak-src="audio/bhaja-govindam/words/w200.mp3">करोति</button> <button type="button" class="poem-word" data-meaning="dispassion" data-speak-src="audio/bhaja-govindam/words/w201.mp3">विरागः</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">A dwelling at a temple tree, the earth for a bed, a deerskin for cloth.</p><p class="verse">Giving up every possession and pleasure — whom does dispassion not make glad?</p></div>
+<details><summary>Note</summary><p>Traditionally attributed to Sureśvara.</p></details></section>
+<section class="stanza" id="stanza-20" style="--rows:3" aria-label="Verse 20">
+<div class="pane original" lang="sa"><span class="mobile-label">Sanskrit</span>
+<div class="stanza-head"><a class="number" href="#stanza-20" aria-label="Verse 20">20</a>
+<button type="button" class="listen stanza-play" data-src="audio/bhaja-govindam/stanza-20.mp3" aria-label="Play verse 20" aria-pressed="false">Play</button></div>
+<p class="verse"><button type="button" class="poem-word" data-meaning="devoted to yoga" data-speak-src="audio/bhaja-govindam/words/w202.mp3">योगरतो</button> <button type="button" class="poem-word" data-meaning="or" data-speak-src="audio/bhaja-govindam/words/w203.mp3">वा</button> <button type="button" class="poem-word" data-meaning="devoted to enjoyment" data-speak-src="audio/bhaja-govindam/words/w204.mp3">भोगरतो</button> <button type="button" class="poem-word" data-meaning="or" data-speak-src="audio/bhaja-govindam/words/w203.mp3">वा</button> <button type="button" class="poem-word" data-meaning="devoted to company" data-speak-src="audio/bhaja-govindam/words/w205.mp3">सङ्गरतो</button> <button type="button" class="poem-word" data-meaning="or" data-speak-src="audio/bhaja-govindam/words/w203.mp3">वा</button> <button type="button" class="poem-word" data-meaning="without company" data-speak-src="audio/bhaja-govindam/words/w206.mp3">सङ्गविहीनः</button> ।</p><p class="verse"><button type="button" class="poem-word" data-meaning="whose" data-speak-src="audio/bhaja-govindam/words/w207.mp3">यस्य</button> <button type="button" class="poem-word" data-meaning="in Brahman" data-speak-src="audio/bhaja-govindam/words/w068.mp3">ब्रह्मणि</button> <button type="button" class="poem-word" data-meaning="delights" data-speak-src="audio/bhaja-govindam/words/w208.mp3">रमते</button> <button type="button" class="poem-word" data-meaning="mind" data-speak-src="audio/bhaja-govindam/words/w209.mp3">चित्तं</button> <button type="button" class="poem-word" data-meaning="rejoices" data-speak-src="audio/bhaja-govindam/words/w210.mp3">नन्दति</button> <button type="button" class="poem-word" data-meaning="rejoices" data-speak-src="audio/bhaja-govindam/words/w210.mp3">नन्दति</button> <button type="button" class="poem-word" data-meaning="rejoices indeed" data-speak-src="audio/bhaja-govindam/words/w211.mp3">नन्दत्येव</button> ॥</p></div>
+<div class="pane rendition"><span class="mobile-label">English</span><span class="number spacer" aria-hidden="true"></span>
+<p class="verse">Whether given to yoga or to pleasure, to company or to solitude —</p><p class="verse">the one whose mind delights in Brahman rejoices, rejoices, rejoices indeed.</p></div>
+<details><summary>Note</summary><p>Traditionally attributed to Nityānanda. The hymn continues beyond this verse in the usual 31-verse recension.</p></details></section>
+</main>
+<footer>
+<p>This page is a sibling of the Shravan reader. Existing Marathi pages and audio were not changed.</p>
+<p>Sanskrit follows the Vaidika Vignanam Devanagari recension for verses 1–20. Word splits follow that text (hyphens become separate words). The English, the word meanings and the notes were written for this site and have not yet been reviewed.</p>
+<p>Spoken words use a Hindi TTS voice reading Devanagari — a stand-in for Sanskrit, not a Vedic reciter. The same word can be glossed differently in another line.</p>
+<p><a href="https://www.vignanam.org/devanagari/bhaja-govindam-moha-mudagaram.html">Source recension</a> · <a href="shravan-masi-spoken.html">Shravan (spoken)</a> · <a href="index.html">All poems</a></p>
+</footer>
+<audio id="poem-audio" preload="metadata"></audio>
+<audio id="word-audio" preload="none" playsinline></audio>
+<div id="meaning-popup" class="meaning-popup" role="tooltip" lang="en" hidden></div>
+<script>(() => {
+  const popup = document.getElementById('meaning-popup');
+  const wordAudio = document.getElementById('word-audio');
+  const speakBtn = document.getElementById('speak-words');
+  let active = null;
+  let pinned = false;
+  let timer;
+  let speakTimer;
+  let speakOn = true;
+  let lastSpoken = null;
+
+  function stopWord() {
+    clearTimeout(speakTimer);
+    speakTimer = null;
+    lastSpoken = null;
+    wordAudio.pause();
+    wordAudio.removeAttribute('src');
+    try { wordAudio.load(); } catch (e) {}
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+  }
+  function poemIsPlaying() {
+    return currentBtn && !audio.paused;
+  }
+  function speakFallback(text) {
+    if (!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'hi-IN';
+    u.rate = 0.8;
+    const voices = speechSynthesis.getVoices();
+    const pick = voices.find(v => /^sa(-|$)/i.test(v.lang)) || voices.find(v => /^hi(-|$)/i.test(v.lang));
+    if (pick) u.voice = pick;
+    speechSynthesis.speak(u);
+  }
+  function speakNow(word) {
+    if (!speakOn || poemIsPlaying()) return;
+    const text = word.textContent.trim();
+    const src = word.getAttribute('data-speak-src');
+    if (lastSpoken === word && wordAudio.getAttribute('src') === src && !wordAudio.paused) return;
+    lastSpoken = word;
+    if (src) {
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+      wordAudio.src = src;
+      wordAudio.play().catch(() => speakFallback(text));
+    } else {
+      speakFallback(text);
+    }
+  }
+  function queueSpeak(word) {
+    clearTimeout(speakTimer);
+    speakTimer = setTimeout(() => speakNow(word), 220);
+  }
+
+  function close() {
+    clearTimeout(timer);
+    clearTimeout(speakTimer);
+    if (active) {
+      active.classList.remove('active');
+      active.removeAttribute('aria-describedby');
+    }
+    active = null;
+    pinned = false;
+    popup.hidden = true;
+    stopWord();
+  }
+  function position() {
+    if (!active) return;
+    const rect = active.getBoundingClientRect();
+    const box = popup.getBoundingClientRect();
+    const left = Math.max(12, Math.min(rect.left + rect.width / 2 - box.width / 2, innerWidth - box.width - 12));
+    const below = rect.bottom + 8;
+    const top = below + box.height <= innerHeight - 12 ? below : Math.max(12, rect.top - box.height - 8);
+    popup.style.left = `${left}px`;
+    popup.style.top = `${top}px`;
+  }
+  function show(word, pin = false, immediateSpeak = false) {
+    const keepPinned = pin;
+    close();
+    active = word;
+    pinned = keepPinned;
+    popup.textContent = word.dataset.meaning;
+    popup.hidden = false;
+    word.classList.add('active');
+    word.setAttribute('aria-describedby', popup.id);
+    position();
+    if (keepPinned || immediateSpeak) speakNow(word);
+    else queueSpeak(word);
+  }
+  function leave() {
+    if (!pinned) timer = setTimeout(close, 180);
+  }
+  document.querySelectorAll('.poem-word').forEach(word => {
+    word.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse' && !pinned) show(word);
+    });
+    word.addEventListener('pointerleave', leave);
+    word.addEventListener('focus', () => {
+      if (word.matches(':focus-visible')) show(word, false, true);
+    });
+    word.addEventListener('blur', () => { if (active === word) close(); });
+    word.addEventListener('click', () => {
+      if (active === word && pinned) close();
+      else show(word, true);
+    });
+  });
+  popup.addEventListener('pointerenter', () => clearTimeout(timer));
+  popup.addEventListener('pointerleave', leave);
+  document.addEventListener('pointerdown', event => {
+    if (!event.target.closest('.poem-word, .meaning-popup')) close();
+  });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
+  window.addEventListener('scroll', close, {passive: true});
+  window.addEventListener('resize', close);
+  document.getElementById('size').onclick = function () {
+    close();
+    this.setAttribute('aria-pressed', String(document.body.classList.toggle('large')));
+  };
+  speakBtn.addEventListener('click', () => {
+    speakOn = !speakOn;
+    speakBtn.setAttribute('aria-pressed', String(speakOn));
+    if (!speakOn) stopWord();
+  });
+
+  const audio = document.getElementById('poem-audio');
+  const buttons = [...document.querySelectorAll('.listen[data-src]')];
+  let currentBtn = null;
+
+  function idleLabel(btn) {
+    return btn.id === 'play-full' ? 'Play hymn' : 'Play';
+  }
+  function resetButtons() {
+    buttons.forEach(btn => {
+      btn.setAttribute('aria-pressed', 'false');
+      btn.textContent = idleLabel(btn);
+    });
+    document.querySelectorAll('.stanza.playing').forEach(s => s.classList.remove('playing'));
+  }
+  function markPlaying(btn) {
+    resetButtons();
+    currentBtn = btn;
+    btn.setAttribute('aria-pressed', 'true');
+    btn.textContent = 'Pause';
+    const stanza = btn.closest('.stanza');
+    if (stanza) stanza.classList.add('playing');
+  }
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      stopWord();
+      if (currentBtn === btn && !audio.paused) {
+        audio.pause();
+        btn.setAttribute('aria-pressed', 'false');
+        btn.textContent = idleLabel(btn);
+        return;
+      }
+      if (currentBtn === btn && audio.paused && audio.getAttribute('src')) {
+        audio.play();
+        markPlaying(btn);
+        return;
+      }
+      audio.src = btn.dataset.src;
+      audio.play().then(() => markPlaying(btn)).catch(() => {
+        btn.textContent = 'Missing audio';
+      });
+    });
+  });
+  audio.addEventListener('ended', () => {
+    currentBtn = null;
+    resetButtons();
+    audio.removeAttribute('src');
+  });
+
+})();</script></body></html>
