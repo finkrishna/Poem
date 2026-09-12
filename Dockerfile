@@ -4,6 +4,7 @@ WORKDIR /app
 COPY --chown=user:user factory_server.py library_store.py factory.js reader.js reader.css index.html README.md ./
 COPY --chown=user:user bhaja-govindam.html bhaja-govindam.json shravan-masi.html shravan-masi-spoken.html ./
 COPY --chown=user:user audio ./audio
+RUN mkdir -p /app/library && chown -R user:user /app
 ENV HOST=0.0.0.0
 ENV PORT=7860
 ENV PYTHONUNBUFFERED=1
