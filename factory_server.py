@@ -221,7 +221,9 @@ SYSTEM = """You are a poem/shloka reader factory. Turn source text into a biling
 Rules:
 - Detect the source language. Do not invent verses or words that are not in the input.
 - Keep original spelling. Split into stanzas the way the source is lined (blank lines, verse numbers, or couplets).
-- Each original line is an array of words {t, m}. t is the source word; m is a short gloss in the TARGET language, as used in that line.
+- Each original line is an array of words {t, m}. t is one full source word (whitespace/danda separated). Never split Devanagari into letters or matras — keep vowel signs with their consonant (अमृतम् is one t, not अ + म् + र + त).
+- m is a short gloss in the TARGET language.
+- A stanza has about 1–4 original lines, each line many words. Do not emit one word per line.
 - rendition: fluent TARGET-language lines, one per original line (or two lines per couplet if that reads better).
 - If the source is prose, one paragraph = one stanza; split into short lines.
 - speech_lang must be a BCP-47 tag the browser can speak for the SOURCE (sa → hi-IN, mr → mr-IN, hi → hi-IN, en → en-US, zh → zh-CN).
@@ -241,6 +243,66 @@ Return JSON only with this shape:
 }"""
 
 
+_DEV_MARK = re.compile(
+    r"^[\u0900-\u0903\u093A-\u094F\u0951-\u0957\u0962-\u0963\u094D\u200c\u200d]+$"
+)
+
+
+def _merge_marks(line) -> list:
+    out = []
+    for raw in line or []:
+        if not isinstance(raw, dict):
+            continue
+        t = str(raw.get("t") or "")
+        if not t:
+            continue
+        if out and _DEV_MARK.match(t):
+            out[-1]["t"] += t
+            continue
+        out.append({"t": t, "m": raw.get("m") or ""})
+    return out
+
+
+def _reflow_original(lines) -> list:
+    merged = [ln for ln in (_merge_marks(l) for l in (lines or [])) if ln]
+    if len(merged) <= 4:
+        return merged
+    short = sum(1 for ln in merged if len(ln) <= 2)
+    if short < 0.6 * len(merged):
+        return merged
+    words = [w for ln in merged for w in ln]
+    mid = max(1, (len(words) + 1) // 2)
+    return [words[:mid], words[mid:]]
+
+
+def _reflow_rendition(lines) -> list:
+    lines = [str(x).strip() for x in (lines or []) if str(x).strip()]
+    if len(lines) <= 4:
+        return lines
+    short = sum(1 for ln in lines if len(ln.split()) <= 4)
+    if short < 0.6 * len(lines):
+        return lines
+    mid = max(1, (len(lines) + 1) // 2)
+    return [" ".join(lines[:mid]), " ".join(lines[mid:])]
+
+
+def normalize_poem(poem: dict) -> dict:
+    stanzas = []
+    for i, s in enumerate(poem.get("stanzas") or []):
+        if not isinstance(s, dict):
+            continue
+        stanzas.append(
+            {
+                **s,
+                "n": s.get("n") or i + 1,
+                "original": _reflow_original(s.get("original") or []),
+                "rendition": _reflow_rendition(s.get("rendition") or []),
+            }
+        )
+    poem["stanzas"] = stanzas
+    return poem
+
+
 def extract_json(content: str) -> dict:
     content = content.strip()
     content = re.sub(r"^```(?:json)?\s*", "", content)
@@ -248,7 +310,7 @@ def extract_json(content: str) -> dict:
     start, end = content.find("{"), content.rfind("}")
     if start < 0 or end < start:
         raise ValueError("Model did not return JSON.")
-    return json.loads(content[start : end + 1])
+    return normalize_poem(json.loads(content[start : end + 1]))
 
 
 def hf_token() -> str:

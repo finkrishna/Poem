@@ -119,7 +119,9 @@ function systemPrompt() {
 Rules:
 - Detect the source language. Do not invent verses or words that are not in the input.
 - Keep original spelling. Split into stanzas the way the source is lined (blank lines, verse numbers, or couplets).
-- Each original line is an array of words {t, m}. t is the source word; m is a short gloss in the TARGET language, as used in that line.
+- Each original line is an array of words {t, m}. t is one full source word (whitespace/danda separated). Never split Devanagari into letters or matras — keep vowel signs with their consonant.
+- m is a short gloss in the TARGET language.
+- A stanza has about 1–4 original lines, each line many words. Do not emit one word per line.
 - rendition: fluent TARGET-language lines, one per original line (or two lines per couplet if that reads better), not a word salad.
 - If the source is prose, one paragraph = one stanza; split into short lines.
 - speech_lang must be a BCP-47 tag the browser can speak for the SOURCE (sa → hi-IN, mr → mr-IN, hi → hi-IN, en → en-US, zh → zh-CN, etc.).

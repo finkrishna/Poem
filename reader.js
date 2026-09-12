@@ -89,8 +89,43 @@
     speechSynthesis.speak(u);
   }
 
+  const DEV_MARK = /^[\u0900-\u0903\u093A-\u094F\u0951-\u0957\u0962-\u0963\u094D\u200c\u200d]+$/;
+
+  function mergeMarks(line) {
+    const out = [];
+    for (const w of line || []) {
+      const t = String((w && w.t) || "");
+      if (!t) continue;
+      if (out.length && DEV_MARK.test(t)) {
+        out[out.length - 1].t += t;
+        continue;
+      }
+      out.push({ t, m: (w && w.m) || "" });
+    }
+    return out;
+  }
+
+  function reflowOriginal(lines) {
+    const merged = (lines || []).map(mergeMarks).filter((l) => l.length);
+    if (merged.length <= 4) return merged;
+    const short = merged.filter((l) => l.length <= 2).length;
+    if (short < 0.6 * merged.length) return merged;
+    const words = merged.flat();
+    const mid = Math.max(1, Math.ceil(words.length / 2));
+    return [words.slice(0, mid), words.slice(mid)];
+  }
+
+  function reflowRendition(lines) {
+    const clean = (lines || []).map((x) => String(x || "").trim()).filter(Boolean);
+    if (clean.length <= 4) return clean;
+    const short = clean.filter((l) => l.split(/\s+/).length <= 4).length;
+    if (short < 0.6 * clean.length) return clean;
+    const mid = Math.max(1, Math.ceil(clean.length / 2));
+    return [clean.slice(0, mid).join(" "), clean.slice(mid).join(" ")];
+  }
+
   function stanzaOriginalText(stanza) {
-    return (stanza.original || [])
+    return reflowOriginal(stanza.original)
       .map((line) => line.map((w) => w.t).join(" "))
       .join("। ");
   }
@@ -257,7 +292,9 @@
     const sections = stanzas.map((stanza) => {
       const n = stanza.n;
       const nn = String(n).padStart(2, "0");
-      const originalLines = (stanza.original || []).map((line, i, arr) => {
+      const origLines = reflowOriginal(stanza.original);
+      const rendLines = reflowRendition(stanza.rendition);
+      const originalLines = origLines.map((line, i, arr) => {
         const words = line.map((w) =>
           el("button", {
             type: "button",
@@ -275,7 +312,8 @@
         kids.push(punct);
         return el("p", { class: "verse" }, kids);
       });
-      const rendition = (stanza.rendition || []).map((line) => el("p", { class: "verse", text: line }));
+      const rendition = rendLines.map((line) => el("p", { class: "verse", text: line }));
+      const rowCount = 1 + Math.max(originalLines.length, rendition.length, 1);
       const note = stanza.note
         ? el("details", null, [el("summary", { text: "Note" }), el("p", { text: stanza.note })])
         : null;
@@ -287,7 +325,7 @@
         "data-stanza": String(n - 1),
         text: "Play",
       });
-      return el("section", { class: "stanza", id: `stanza-${n}`, style: "--rows:3", "aria-label": `Stanza ${n}` }, [
+      return el("section", { class: "stanza", id: `stanza-${n}`, style: `--rows:${rowCount}`, "aria-label": `Stanza ${n}` }, [
         el("div", { class: "pane original", lang: data.source_lang || "" }, [
           el("span", { class: "mobile-label", text: data.source_lang_label || "Original" }),
           el("div", { class: "stanza-head" }, [
