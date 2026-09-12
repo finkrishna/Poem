@@ -6,9 +6,8 @@ import os
 from pathlib import Path
 
 import gradio as gr
-import spaces
 
-from factory_server import approx_truncate, call_xai, fetch_url, load_dotenv
+from factory_server import approx_truncate, call_llm, fetch_url, hf_token, load_dotenv
 
 ROOT = Path(__file__).resolve().parent
 load_dotenv()
@@ -52,14 +51,8 @@ EXAMPLE = (
 )
 
 
-@spaces.GPU(duration=1)
-def _zerogpu_slot() -> bool:
-    """No-op so a free account can host this Space on ZeroGPU. Not used for Grok."""
-    return True
-
-
 def make_reader(text: str, url: str, target: str) -> tuple[str, str]:
-    """Build a bilingual reader from pasted text or a page URL using SpaceXAI Grok."""
+    """Build a bilingual reader from pasted text or a page URL via Hugging Face Inference."""
     text = (text or "").strip()
     url = (url or "").strip()
     if url and not text:
@@ -67,12 +60,11 @@ def make_reader(text: str, url: str, target: str) -> tuple[str, str]:
     text, truncated = approx_truncate(text)
     if not text:
         raise gr.Error("Paste a poem or give a URL.")
-    api_key = (os.environ.get("XAI_API_KEY") or "").strip()
-    if not api_key:
-        raise gr.Error("This Space is missing the XAI_API_KEY secret.")
+    if not hf_token() and not (os.environ.get("XAI_API_KEY") or "").strip():
+        raise gr.Error("This Space is missing HF_TOKEN (and has no XAI_API_KEY fallback).")
     label, _, code = (target or "English · en").partition(" · ")
     label, code = (label or "English").strip(), (code or "en").strip()
-    poem = call_xai(text, label, code, api_key)
+    poem = call_llm(text, label, code)
     poem["target_lang"] = code
     poem["target_lang_label"] = label
     poem["truncated"] = truncated
@@ -95,8 +87,7 @@ with gr.Blocks(
         """# Drop a text. Get a reader.
 Any language in · any language out.
 
-Translation uses **SpaceXAI Grok** (often 1–2 minutes). Speech uses **voices already on your device**.
-Word glosses are generated and have not been reviewed."""
+Translation and word glosses use **Qwen 2.5 72B** on Hugging Face Inference (usually ~15–40 seconds). Speech uses **voices already on your device**. Gloss is unverified."""
     )
     text = gr.Textbox(label="Text", lines=8, placeholder=EXAMPLE)
     url = gr.Textbox(label="Or a URL", placeholder="https://vignanam.org/devanagari/sri-rudram-namakam.html")

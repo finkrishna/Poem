@@ -29,6 +29,9 @@ MAX_FETCH = 1_000_000
 MAX_PER_HOUR = int(os.environ.get("MAX_PER_HOUR", "10"))
 XAI_URL = "https://api.x.ai/v1/chat/completions"
 XAI_MODEL = os.environ.get("XAI_MODEL", "grok-4.5")
+HF_URL = "https://router.huggingface.co/v1/chat/completions"
+# Novita hosts Qwen 2.5 72B cheaply; :fastest often hits Groq/Together Cloudflare 403s.
+HF_MODEL = os.environ.get("HF_MODEL", "Qwen/Qwen2.5-72B-Instruct:novita")
 HIDDEN_FILES = {".env", ".git", ".gitignore", ".dockerignore"}
 FETCH_UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -246,7 +249,35 @@ def extract_json(content: str) -> dict:
     return json.loads(content[start : end + 1])
 
 
-def call_xai(text: str, target_label: str, target_code: str, api_key: str) -> dict:
+def hf_token() -> str:
+    tok = (os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN") or "").strip()
+    if tok:
+        return tok
+    path = Path.home() / ".cache" / "huggingface" / "token"
+    if path.exists():
+        return path.read_text().strip()
+    return ""
+
+
+def _chat_completions(url: str, key: str, payload: dict, timeout: int, label: str) -> dict:
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode(),
+        headers={
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read().decode())
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", errors="replace")[:400]
+        raise RuntimeError(f"{label} {e.code}: {detail}") from e
+
+
+def call_llm(text: str, target_label: str, target_code: str, api_key: str = "") -> dict:
     messages = [
         {"role": "system", "content": SYSTEM},
         {
@@ -254,39 +285,60 @@ def call_xai(text: str, target_label: str, target_code: str, api_key: str) -> di
             "content": f"TARGET language: {target_label} ({target_code})\n\nSOURCE TEXT:\n{text}",
         },
     ]
-
-    def post(payload: dict) -> dict:
-        req = urllib.request.Request(
-            XAI_URL,
-            data=json.dumps(payload).encode(),
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-            },
-            method="POST",
-        )
+    errors: list[str] = []
+    token = hf_token()
+    if token:
         try:
-            with urllib.request.urlopen(req, timeout=180) as resp:
-                return json.loads(resp.read().decode())
-        except urllib.error.HTTPError as e:
-            detail = e.read().decode("utf-8", errors="replace")[:400]
-            raise RuntimeError(f"SpaceXAI {e.code}: {detail}") from e
+            print(f"llm: Hugging Face {HF_MODEL}", flush=True)
+            payload = _chat_completions(
+                HF_URL,
+                token,
+                {
+                    "model": HF_MODEL,
+                    "temperature": 0.2,
+                    "max_tokens": 8192,
+                    "messages": messages,
+                },
+                timeout=90,
+                label="HuggingFace",
+            )
+            content = (payload.get("choices") or [{}])[0].get("message", {}).get("content") or ""
+            return extract_json(content)
+        except Exception as e:
+            errors.append(str(e))
+            print(f"hf failed, trying SpaceXAI: {e}", flush=True)
 
-    body = {
-        "model": XAI_MODEL,
-        "temperature": 0.2,
-        "search_parameters": {"mode": "off"},
-        "messages": messages,
-    }
-    try:
-        payload = post(body)
-    except RuntimeError as e:
-        if "search_parameters" not in str(e).lower():
-            raise
-        body.pop("search_parameters", None)
-        payload = post(body)
-    content = payload["choices"][0]["message"]["content"]
-    return extract_json(content)
+    xai_key = (os.environ.get("XAI_API_KEY") or api_key or "").strip()
+    if xai_key:
+        body = {
+            "model": XAI_MODEL,
+            "temperature": 0.2,
+            "max_tokens": 8192,
+            "search_parameters": {"mode": "off"},
+            "messages": messages,
+        }
+        try:
+            print(f"llm: SpaceXAI {XAI_MODEL}", flush=True)
+            payload = _chat_completions(XAI_URL, xai_key, body, timeout=180, label="SpaceXAI")
+        except RuntimeError as e:
+            if "search_parameters" not in str(e).lower():
+                errors.append(str(e))
+                payload = None
+            else:
+                body.pop("search_parameters", None)
+                payload = _chat_completions(XAI_URL, xai_key, body, timeout=180, label="SpaceXAI")
+        if payload is not None:
+            content = (payload.get("choices") or [{}])[0].get("message", {}).get("content") or ""
+            return extract_json(content)
+
+    raise RuntimeError(
+        "No working LLM. Set HF_TOKEN (Hugging Face Inference) or XAI_API_KEY. "
+        + (" ".join(errors) if errors else "")
+    )
+
+
+def call_xai(text: str, target_label: str, target_code: str, api_key: str) -> dict:
+    return call_llm(text, target_label, target_code, api_key)
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -326,14 +378,15 @@ class Handler(SimpleHTTPRequestHandler):
             self._json(200, out)
             return
         if path == "/api/health":
-            key = os.environ.get("XAI_API_KEY", "")
+            has_hf = bool(hf_token())
+            has_xai = bool(os.environ.get("XAI_API_KEY"))
             self._json(
                 200,
                 {
                     "ok": True,
-                    "has_key": bool(key),
-                    "provider": "spacexai",
-                    "model": XAI_MODEL,
+                    "has_key": has_hf or has_xai,
+                    "provider": "huggingface" if has_hf else "spacexai",
+                    "model": HF_MODEL if has_hf else XAI_MODEL,
                     "max_per_hour": MAX_PER_HOUR,
                 },
             )
@@ -396,8 +449,8 @@ class Handler(SimpleHTTPRequestHandler):
                     "Nothing to read from that source. If you used a URL, paste the page text instead."
                 )
             api_key = (os.environ.get("XAI_API_KEY") or body.get("api_key") or "").strip()
-            if not api_key:
-                raise ValueError("Missing XAI_API_KEY. Set it on the host or paste a SpaceXAI key in the page.")
+            if not hf_token() and not api_key:
+                raise ValueError("Missing HF_TOKEN or XAI_API_KEY.")
             target_code = body.get("target_lang") or "en"
             target_label = body.get("target_lang_label") or "English"
             if not _job_lock.acquire(blocking=False):
@@ -409,8 +462,8 @@ class Handler(SimpleHTTPRequestHandler):
 
             def run() -> None:
                 try:
-                    print(f"process: {len(text)} chars → {XAI_MODEL}", flush=True)
-                    poem = call_xai(text, target_label, target_code, api_key)
+                    print(f"process: {len(text)} chars", flush=True)
+                    poem = call_llm(text, target_label, target_code, api_key)
                     poem["target_lang"] = target_code
                     poem["target_lang_label"] = target_label
                     poem["truncated"] = truncated
