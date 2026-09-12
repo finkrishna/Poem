@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 import gradio as gr
+import spaces
 
 from factory_server import approx_truncate, call_llm, fetch_url, hf_token, load_dotenv
 
@@ -49,6 +50,12 @@ EXAMPLE = (
     "भज गोविन्दं भज गोविन्दं गोविन्दं भज मूढमते ।\n"
     "सम्प्राप्ते सन्निहिते काले नहि नहि रक्षति डुकृङ्करणे ॥"
 )
+
+
+@spaces.GPU(duration=1)
+def _zerogpu_slot() -> bool:
+    """Required while the Space runs on ZeroGPU hardware. Never called."""
+    return True
 
 
 def make_reader(text: str, url: str, target: str) -> tuple[str, str]:
@@ -113,4 +120,9 @@ Translation and word glosses use **Qwen 2.5 72B** on Hugging Face Inference (usu
 
 if __name__ == "__main__":
     demo.queue()
-    demo.launch(mcp_server=True)
+    demo.launch(
+        mcp_server=True,
+        theme=gr.themes.Soft(),
+        css=CSS,
+        head=f"<script>{READER_JS}</script>",
+    )
