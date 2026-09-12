@@ -109,7 +109,7 @@ async function waitForJob(jobId) {
     if (data.status === "done") return data.poem;
     if (data.status === "error") throw new Error(data.error || "Factory failed.");
     const secs = Math.round((Date.now() - t0) / 1000);
-    setStatus(`Grok is writing the reader… ${secs}s (often 1–2 minutes)`);
+    setStatus(`Building the reader… ${secs}s`);
   }
   throw new Error("Timed out waiting for Grok. Try a shorter passage.");
 }
@@ -253,7 +253,13 @@ async function makeReader() {
     $("detected").textContent = `Detected: ${poem.source_lang_label || poem.source_lang || "unknown"} → ${poem.target_lang_label}`;
     PoemReader.mountReader($("reader-root"), poem);
     const extra = poem.truncated ? " (first ~2000 tokens)" : "";
-    setStatus(`Ready · ${poem.stanzas?.length || 0} stanzas${extra}`);
+    if (poem.from_library) {
+      setStatus(`From library · ${poem.stanzas?.length || 0} stanzas (already made)`);
+    } else {
+      const saved = poem.library_id ? " · saved for others" : "";
+      setStatus(`Ready · ${poem.stanzas?.length || 0} stanzas${extra}${saved}`);
+    }
+    refreshLibrary();
   } catch (err) {
     setStatus(err.message || String(err), true);
   } finally {
@@ -302,6 +308,60 @@ function wireDrop() {
   });
 }
 
+function escapeHtml(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+async function openLibraryItem(id) {
+  const r = await fetch(`/api/library/${encodeURIComponent(id)}`, { cache: "no-store" });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || "Could not open that reader.");
+  const poem = normalizePoem(data, {
+    code: data.target_lang || "en",
+    label: data.target_lang_label || "English",
+  });
+  $("detected").hidden = false;
+  $("detected").textContent = `Library: ${poem.source_lang_label || "original"} → ${poem.target_lang_label || "English"}`;
+  PoemReader.mountReader($("reader-root"), poem);
+  setStatus(`From library · ${poem.stanzas?.length || 0} stanzas`);
+  $("reader-root").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+async function refreshLibrary() {
+  const box = $("library-list");
+  if (!box) return;
+  try {
+    const r = await fetch("/api/library", { cache: "no-store" });
+    if (!r.ok) return;
+    const data = await r.json();
+    box.querySelectorAll("[data-lib]").forEach((n) => n.remove());
+    (data.items || []).forEach((it) => {
+      const a = document.createElement("a");
+      a.className = "card";
+      a.href = `#lib-${encodeURIComponent(it.id)}`;
+      a.dataset.lib = it.id;
+      const langs = [it.source_lang_label, it.target_lang_label, "factory"].filter(Boolean).join(" · ");
+      a.innerHTML = `<strong>${escapeHtml(it.title_original || it.id)}</strong><span>${escapeHtml(langs)}</span>`;
+      a.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          history.replaceState(null, "", `#lib-${encodeURIComponent(it.id)}`);
+          await openLibraryItem(it.id);
+        } catch (err) {
+          setStatus(err.message || String(err), true);
+        }
+      });
+      box.appendChild(a);
+    });
+  } catch {
+    /* factory without library API */
+  }
+}
+
 async function boot() {
   fillLangs();
   wireDrop();
@@ -329,6 +389,15 @@ async function boot() {
     setStatus("Static page: paste a SpaceXAI key to translate in the browser, or run the factory server for URL fetch.");
   }
   if (speechSynthesis.getVoices) speechSynthesis.getVoices();
+  await refreshLibrary();
+  const libHash = /^#lib-(.+)$/.exec(location.hash || "");
+  if (libHash) {
+    try {
+      await openLibraryItem(decodeURIComponent(libHash[1]));
+    } catch (err) {
+      setStatus(err.message || String(err), true);
+    }
+  }
   if (new URLSearchParams(location.search).get("demo") === "1") {
     const raw = await fetch("bhaja-govindam.json").then((r) => r.json());
     raw.speech_lang = "hi-IN";

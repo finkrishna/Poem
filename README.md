@@ -20,7 +20,7 @@ Hobby project. Translations are model-generated and **not** scholar-reviewed.
 
 | Piece | What it does |
 |---|---|
-| **Factory** (`index.html`) | Drop text, a file, or a URL. Grok detects the language, glosses words, writes a translation. |
+| **Factory** (`index.html`) | Drop text, a file, or a URL. Finished readers are saved under **Already made** so the next visitor can open them without rebuilding. |
 | **Library** | Finished pages: [श्रावण मासी](shravan-masi-spoken.html) (Marathi) and [भज गोविन्दम्](bhaja-govindam.html) (Sanskrit, first 20 verses). |
 | **Speech** | Factory readers use **voices already on your device** (browser Web Speech). Pick one in the Voice menu. Library poems also have recorded mp3s. |
 | **Translation** | Hugging Face Inference **Kimi K2** (`moonshotai/Kimi-K2-Instruct:novita`), then DeepSeek V3.2, then SpaceXAI Grok. First ~2,000 tokens. Usually 10–20 seconds. |

@@ -21,6 +21,8 @@ from collections import defaultdict, deque
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+import library_store
+
 ROOT = Path(__file__).resolve().parent
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8765"))
@@ -438,6 +440,17 @@ class Handler(SimpleHTTPRequestHandler):
                 out["error"] = job.get("error") or "Failed."
             self._json(200, out)
             return
+        if path == "/api/library":
+            self._json(200, {"items": library_store.list_items()})
+            return
+        if path.startswith("/api/library/"):
+            item_id = path.split("/api/library/", 1)[1].strip("/")
+            poem = library_store.load_poem(item_id)
+            if not poem:
+                self._json(404, {"error": "Not in the library."})
+                return
+            self._json(200, poem)
+            return
         if path == "/api/health":
             has_hf = bool(hf_token())
             has_xai = bool(os.environ.get("XAI_API_KEY"))
@@ -523,11 +536,26 @@ class Handler(SimpleHTTPRequestHandler):
 
             def run() -> None:
                 try:
+                    digest = library_store.source_hash(text, target_code)
+                    hit = library_store.find_by_hash(digest)
+                    cached = library_store.load_poem(hit["id"]) if hit else None
+                    if cached:
+                        print(f"library hit {hit['id']}", flush=True)
+                        cached["from_library"] = True
+                        cached["library_id"] = hit["id"]
+                        with _jobs_lock:
+                            _jobs[job_id] = {"status": "done", "poem": cached}
+                        return
                     print(f"process: {len(text)} chars", flush=True)
                     poem = call_llm(text, target_label, target_code, api_key)
                     poem["target_lang"] = target_code
                     poem["target_lang_label"] = target_label
                     poem["truncated"] = truncated
+                    try:
+                        rec = library_store.save_poem(poem, text, target_code)
+                        poem["library_id"] = rec["id"]
+                    except Exception as exc:
+                        print(f"library save failed: {exc}", flush=True)
                     print(f"ready: {len(poem.get('stanzas') or [])} stanzas", flush=True)
                     with _jobs_lock:
                         _jobs[job_id] = {"status": "done", "poem": poem}
@@ -546,6 +574,7 @@ class Handler(SimpleHTTPRequestHandler):
 def main() -> None:
     load_dotenv()
     os.chdir(ROOT)
+    library_store.pull_hub()
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     print(f"Poem factory http://{HOST}:{PORT}/", flush=True)
     if not os.environ.get("XAI_API_KEY"):
