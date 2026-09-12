@@ -1,0 +1,9 @@
+.git
+.env
+.DS_Store
+*.zip
+__pycache__
+*.pyc
+.pm_loop_state
+PM_TO_*.md
+*_TO_PM.md

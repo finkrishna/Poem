@@ -1,16 +1,78 @@
 /* Shared poem-reader: gloss popups + Web Speech (hover word, stanza, full). */
 (function (global) {
+  const VOICE_STORE = "poem.voiceURI";
+
+  function allVoices() {
+    if (!global.speechSynthesis) return [];
+    return speechSynthesis.getVoices() || [];
+  }
+
   function pickVoice(lang) {
-    if (!global.speechSynthesis) return null;
-    const voices = speechSynthesis.getVoices();
+    const voices = allVoices();
+    if (!voices.length) return null;
+    const saved = localStorage.getItem(VOICE_STORE);
+    if (saved) {
+      const chosen = voices.find((v) => v.voiceURI === saved);
+      if (chosen) return chosen;
+    }
     const prefix = (lang || "en").split("-")[0].toLowerCase();
-    const fallbacks = { sa: ["hi", "en"], mr: ["hi", "en"], bn: ["hi", "en"] };
+    const fallbacks = { sa: ["hi", "en"], mr: ["hi", "en"], bn: ["hi", "en"], ta: ["en"], te: ["en"] };
     const order = [prefix].concat(fallbacks[prefix] || ["en"]);
     for (const p of order) {
-      const hit = voices.find((v) => v.lang.toLowerCase().startsWith(p));
+      const hit = voices.find((v) => (v.lang || "").toLowerCase().startsWith(p));
       if (hit) return hit;
     }
     return voices[0] || null;
+  }
+
+  function fillVoiceSelect(select) {
+    if (!select) return;
+    const voices = allVoices();
+    const saved = localStorage.getItem(VOICE_STORE) || "";
+    const keep = select.value;
+    select.innerHTML = "";
+    const auto = document.createElement("option");
+    auto.value = "";
+    auto.textContent = "Auto (match poem language)";
+    select.appendChild(auto);
+    const groups = new Map();
+    voices.forEach((v) => {
+      const key = v.lang || "other";
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(v);
+    });
+    [...groups.keys()].sort().forEach((lang) => {
+      const og = document.createElement("optgroup");
+      og.label = lang;
+      groups.get(lang).forEach((v) => {
+        const o = document.createElement("option");
+        o.value = v.voiceURI;
+        o.textContent = v.name;
+        og.appendChild(o);
+      });
+      select.appendChild(og);
+    });
+    const want = saved || keep;
+    if (want && [...select.options].some((o) => o.value === want)) select.value = want;
+    else select.value = "";
+  }
+
+  function wireVoiceSelect(select) {
+    if (!select || select.dataset.wired) return;
+    select.dataset.wired = "1";
+    fillVoiceSelect(select);
+    select.addEventListener("change", () => {
+      if (select.value) localStorage.setItem(VOICE_STORE, select.value);
+      else localStorage.removeItem(VOICE_STORE);
+      document.querySelectorAll("select.voice-select").forEach((el) => {
+        if (el !== select) fillVoiceSelect(el);
+      });
+    });
+    if (typeof speechSynthesis !== "undefined" && speechSynthesis.addEventListener) {
+      speechSynthesis.addEventListener("voiceschanged", () => {
+        document.querySelectorAll("select.voice-select").forEach(fillVoiceSelect);
+      });
+    }
   }
 
   function speakText(text, lang, rate) {
@@ -20,7 +82,10 @@
     u.lang = lang || "en-US";
     u.rate = rate || 0.85;
     const v = pickVoice(u.lang);
-    if (v) u.voice = v;
+    if (v) {
+      u.voice = v;
+      u.lang = v.lang || u.lang;
+    }
     speechSynthesis.speak(u);
   }
 
@@ -180,6 +245,10 @@
         ]),
       ]),
       el("button", { type: "button", id: "play-full", class: "listen", "aria-pressed": "false", text: "Play poem" }),
+      el("label", { class: "voice-field", for: "reader-voice" }, [
+        el("span", { text: "Voice" }),
+        el("select", { id: "reader-voice", class: "voice-select", title: "Voices installed on this device" }),
+      ]),
       el("button", { id: "size", "aria-pressed": "false", text: "Larger text" }),
       el("button", { type: "button", id: "speak-words", "aria-pressed": "true", text: "Speak words" }),
       el("button", { type: "button", text: "Print", onclick: () => window.print() }),
@@ -295,7 +364,10 @@
       u.lang = speechLang;
       u.rate = 0.88;
       const v = pickVoice(speechLang);
-      if (v) u.voice = v;
+      if (v) {
+        u.voice = v;
+        u.lang = v.lang || u.lang;
+      }
       u.onend = () => {
         if (currentBtn === btn) resetButtons();
       };
@@ -307,6 +379,7 @@
     }
 
     bindGloss(root, speechLang, () => playing.on);
+    wireVoiceSelect(root.querySelector("#reader-voice"));
     root.querySelector("#play-full").addEventListener("click", () => {
       const text = stanzas.map(stanzaOriginalText).join(". ");
       toggleSpeak(root.querySelector("#play-full"), text);
@@ -320,5 +393,5 @@
     root.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  global.PoemReader = { mountReader, speakText };
+  global.PoemReader = { mountReader, speakText, fillVoiceSelect, wireVoiceSelect };
 })(window);

@@ -35,6 +35,10 @@
       <label for="target-lang">Translate to</label>
       <select id="target-lang"></select>
     </div>
+    <div class="field">
+      <label for="voice-select">Voice on this device</label>
+      <select id="voice-select" class="voice-select"></select>
+    </div>
     <div class="field" id="key-wrap" hidden>
       <label for="api-key">SpaceXAI key</label>
       <input type="password" id="api-key" autocomplete="off" placeholder="xai-…">
@@ -46,7 +50,7 @@
   </div>
   <p class="status" id="status"></p>
   <p class="chip" id="detected" hidden></p>
-  <p class="key-hint">Keys stay in this browser tab or in the local server environment. They are never committed. Run <code>python3 factory_server.py</code> for URL fetching and to keep the key off the page.</p>
+  <p class="key-hint" id="key-hint">Translation uses SpaceXAI (Grok). Speech uses voices already on your computer or phone — pick one above. A hosted factory keeps the API key on the server; set a spend cap at <a href="https://console.x.ai">console.x.ai</a>.</p>
 </div>
 
 <div id="reader-root"></div>
@@ -68,7 +72,7 @@
 </main>
 
 <footer>
-<p>Existing poem pages and their audio were not changed. The factory renders a live reader with browser speech; it does not overwrite the Shravan or Bhaja files.</p>
+<p>Library pages keep their recorded audio. Factory readers speak with the browser voice you pick. Word glosses are model-generated and unverified.</p>
 </footer>
 <script src="reader.js"></script>
 <script src="factory.js"></script>

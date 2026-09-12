@@ -88,8 +88,8 @@ async function health() {
   }
 }
 
-async function processOnServer(payload) {
-  const r = await fetch("/api/process", {
+async function postApi(path, payload) {
+  const r = await fetch(path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -97,6 +97,21 @@ async function processOnServer(payload) {
   const data = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(data.error || `Server error ${r.status}`);
   return data;
+}
+
+async function waitForJob(jobId) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < 240000) {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const r = await fetch(`/api/job/${jobId}`, { cache: "no-store" });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(data.error || `Server error ${r.status}`);
+    if (data.status === "done") return data.poem;
+    if (data.status === "error") throw new Error(data.error || "Factory failed.");
+    const secs = Math.round((Date.now() - t0) / 1000);
+    setStatus(`Grok is writing the reader… ${secs}s (often 1–2 minutes)`);
+  }
+  throw new Error("Timed out waiting for Grok. Try a shorter passage.");
 }
 
 function systemPrompt() {
@@ -201,13 +216,23 @@ async function makeReader() {
 
     let poem;
     if (info.ok) {
-      poem = await processOnServer({
-        text: raw,
-        url: url || undefined,
+      let text = raw;
+      if (url && !text.trim()) {
+        setStatus("Fetching page…");
+        const got = await postApi("/api/fetch", { url });
+        text = got.text || "";
+        $("source-text").value = text;
+        setStatus(`Got ${text.length} characters. Building reader with Grok (often 1–2 minutes)…`);
+      } else {
+        setStatus("Building reader with Grok (often 1–2 minutes)…");
+      }
+      const started = await postApi("/api/process", {
+        text,
         target_lang: target.code,
         target_lang_label: target.label,
         api_key: apiKey || undefined,
       });
+      poem = started.job_id ? await waitForJob(started.job_id) : started;
     } else {
       if (url && !raw.trim()) {
         throw new Error("URL fetch needs the local factory server (python3 factory_server.py). Or paste the text.");
@@ -279,15 +304,27 @@ async function boot() {
   fillLangs();
   wireDrop();
   $("go").addEventListener("click", makeReader);
+  if (window.PoemReader && PoemReader.wireVoiceSelect) {
+    PoemReader.wireVoiceSelect($("voice-select"));
+  }
   const saved = sessionStorage.getItem("poem.xaiKey");
   if (saved) $("api-key").value = saved;
   const info = await health();
+  const hint = $("key-hint");
   if (info.ok) {
     $("key-wrap").hidden = Boolean(info.has_key);
-    setStatus(info.has_key ? "Factory server is up." : "Factory server is up. Paste a SpaceXAI key to run.");
+    setStatus(
+      info.has_key
+        ? "Factory is up. Paste text or a URL, pick a voice, then Make reader."
+        : "Factory is up. Paste a SpaceXAI key to run, or set XAI_API_KEY on the server."
+    );
+    if (hint && info.has_key) {
+      hint.textContent =
+        "This host has a SpaceXAI key. Translation uses Grok (often 1–2 minutes). Speech uses voices on your device. The operator should cap spend at console.x.ai.";
+    }
   } else {
     $("key-wrap").hidden = false;
-    setStatus("Static page: paste a SpaceXAI key to run in the browser, or start python3 factory_server.py for URL fetch.");
+    setStatus("Static page: paste a SpaceXAI key to translate in the browser, or run the factory server for URL fetch.");
   }
   if (speechSynthesis.getVoices) speechSynthesis.getVoices();
   if (new URLSearchParams(location.search).get("demo") === "1") {

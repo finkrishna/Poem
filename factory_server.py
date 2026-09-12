@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Local factory API + static file server for the Poem Reader.
+"""Poem Reader factory: static files + /api/fetch + /api/process.
 
-  XAI_API_KEY=... python3 factory_server.py
+  python3 factory_server.py
 
-Then open http://127.0.0.1:8765/
+Local:  http://127.0.0.1:8765/
+Hosted: bind 0.0.0.0 and set PORT (Render / Hugging Face Spaces Docker).
 """
 from __future__ import annotations
 
@@ -11,17 +12,28 @@ import json
 import os
 import re
 import sys
+import threading
+import time
+import uuid
 import urllib.error
 import urllib.request
+from collections import defaultdict, deque
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
+HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8765"))
 MAX_CHARS = 8000  # ~2000 tokens
 MAX_FETCH = 1_000_000
+MAX_PER_HOUR = int(os.environ.get("MAX_PER_HOUR", "10"))
 XAI_URL = "https://api.x.ai/v1/chat/completions"
 XAI_MODEL = os.environ.get("XAI_MODEL", "grok-4.5")
+HIDDEN_FILES = {".env", ".git", ".gitignore", ".dockerignore"}
+FETCH_UA = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+)
 
 
 def load_dotenv() -> None:
@@ -36,6 +48,32 @@ def load_dotenv() -> None:
         os.environ.setdefault(key.strip(), val.strip().strip('"').strip("'"))
 
 
+_hits = defaultdict(deque)
+_hits_lock = threading.Lock()
+_jobs = {}
+_jobs_lock = threading.Lock()
+_job_lock = threading.Lock()
+
+
+def client_ip(handler: SimpleHTTPRequestHandler) -> str:
+    forwarded = handler.headers.get("X-Forwarded-For", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return handler.client_address[0]
+
+
+def rate_ok(ip: str) -> bool:
+    now = time.time()
+    with _hits_lock:
+        q = _hits[ip]
+        while q and q[0] < now - 3600:
+            q.popleft()
+        if len(q) >= MAX_PER_HOUR:
+            return False
+        q.append(now)
+        return True
+
+
 def approx_truncate(text: str) -> tuple[str, bool]:
     text = text.replace("\u0000", " ").strip()
     if len(text) <= MAX_CHARS:
@@ -48,7 +86,8 @@ def approx_truncate(text: str) -> tuple[str, bool]:
 
 
 def strip_html(raw: str) -> str:
-    raw = re.sub(r"(?is)<(script|style).*?>.*?</\1>", " ", raw)
+    raw = re.sub(r"(?is)<!--.*?-->", " ", raw)
+    raw = re.sub(r"(?is)<(script|style|nav|noscript).*?>.*?</\1>", " ", raw)
     raw = re.sub(r"(?is)<br\s*/?>", "\n", raw)
     raw = re.sub(r"(?is)</p>", "\n\n", raw)
     raw = re.sub(r"(?is)<[^>]+>", " ", raw)
@@ -60,23 +99,117 @@ def strip_html(raw: str) -> str:
     return re.sub(r"\n{3,}", "\n\n", raw).strip()
 
 
+def _cut_related(html: str) -> str:
+    m = re.search(
+        r'(?is)class="[^"]*(relatedCategories|related|aqtree)[^"]*"',
+        html,
+    )
+    return html[: m.start()] if m else html
+
+
+def _div_after(html: str, attr_re: str) -> str | None:
+    m = re.search(rf"(?is)<(?:div|p|h1|h2)[^>]*{attr_re}[^>]*>", html)
+    if not m:
+        return None
+    return _cut_related(html[m.end() :])
+
+
+def extract_main(html: str) -> str:
+    """Prefer the hymn/article body over site chrome (language switchers, related lists)."""
+    title = ""
+    m = re.search(r'(?is)id="stitle"[^>]*>(.*?)</p>', html)
+    if m:
+        title = strip_html(m.group(1))
+    if not title:
+        m = re.search(r'(?is)property="og:title"\s+content="([^"]+)"', html)
+        if m:
+            title = m.group(1).strip()
+
+    body_html = None
+    for attr in (
+        r'id=["\']stext["\']',
+        r'class=["\'][^"\']*stotramtext',
+        r'id=["\']stotramcontent["\']',
+        r'id=["\']content["\']',
+        r'role=["\']main["\']',
+    ):
+        chunk = _div_after(html, attr)
+        if chunk and len(strip_html(chunk)) > 80:
+            body_html = chunk
+            break
+    if body_html is None:
+        m = re.search(r"(?is)<(article|main)[^>]*>", html)
+        if m:
+            rest = _cut_related(html[m.end() :])
+            if len(strip_html(rest)) > 80:
+                body_html = rest
+
+    if body_html is None:
+        return strip_html(html)
+    text = strip_html(body_html)
+    if title and title not in text[:240]:
+        text = f"{title}\n\n{text}"
+    return text
+
+
 def fetch_url(url: str) -> str:
     if not re.match(r"^https?://", url, re.I):
         raise ValueError("URL must start with http:// or https://")
     req = urllib.request.Request(
         url,
-        headers={"User-Agent": "PoemReaderFactory/1.0"},
+        headers={
+            "User-Agent": FETCH_UA,
+            "Accept": "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+        },
         method="GET",
     )
-    with urllib.request.urlopen(req, timeout=25) as resp:
-        data = resp.read(MAX_FETCH + 1)
-        ctype = resp.headers.get("Content-Type", "")
+    try:
+        with urllib.request.urlopen(req, timeout=25) as resp:
+            status = getattr(resp, "status", 200) or 200
+            data = resp.read(MAX_FETCH + 1)
+            ctype = (resp.headers.get("Content-Type") or "").lower()
+            final_url = resp.geturl()
+    except urllib.error.HTTPError as e:
+        if e.code == 403:
+            raise ValueError(
+                "That URL returned HTTP 403. Use the full page address "
+                "(the URL box can cut off paths like /devanagari/…). "
+                f"Tried: {url}"
+            ) from e
+        if e.code == 404:
+            raise ValueError(f"That URL was not found (HTTP 404). Tried: {url}") from e
+        raise ValueError(f"Could not fetch URL (HTTP {e.code}). Tried: {url}") from e
+    except urllib.error.URLError as e:
+        raise ValueError(f"Could not fetch URL: {e.reason}") from e
     if len(data) > MAX_FETCH:
         data = data[:MAX_FETCH]
+    head = data[:4000]
+    if (
+        status in (202, 401, 403)
+        or b"awsWafCookie" in head
+        or b"captcha" in head.lower()
+        or b"Access Denied" in head
+    ):
+        raise ValueError(
+            "That site blocked the fetch (bot challenge or empty response). "
+            "Paste the page text instead, or try a different URL."
+        )
+    if not data.strip():
+        raise ValueError(
+            f"That URL returned an empty page (HTTP {status}). "
+            "Check the address is complete, or paste the text."
+        )
     text = data.decode("utf-8", errors="replace")
-    if "html" in ctype.lower() or "<html" in text[:400].lower():
-        return strip_html(text)
-    return text.strip()
+    if "html" in ctype or "<html" in text[:400].lower():
+        text = extract_main(text)
+    text = text.strip()
+    if len(text) < 40:
+        raise ValueError(
+            "Could not extract readable text from that URL. "
+            f"Fetched {final_url}. Paste the page text instead."
+        )
+    return text
 
 
 SYSTEM = """You are a poem/shloka reader factory. Turn source text into a bilingual reader.
@@ -114,34 +247,44 @@ def extract_json(content: str) -> dict:
 
 
 def call_xai(text: str, target_label: str, target_code: str, api_key: str) -> dict:
-    body = json.dumps(
+    messages = [
+        {"role": "system", "content": SYSTEM},
         {
-            "model": XAI_MODEL,
-            "temperature": 0.2,
-            "messages": [
-                {"role": "system", "content": SYSTEM},
-                {
-                    "role": "user",
-                    "content": f"TARGET language: {target_label} ({target_code})\n\nSOURCE TEXT:\n{text}",
-                },
-            ],
-        }
-    ).encode()
-    req = urllib.request.Request(
-        XAI_URL,
-        data=body,
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
+            "role": "user",
+            "content": f"TARGET language: {target_label} ({target_code})\n\nSOURCE TEXT:\n{text}",
         },
-        method="POST",
-    )
+    ]
+
+    def post(payload: dict) -> dict:
+        req = urllib.request.Request(
+            XAI_URL,
+            data=json.dumps(payload).encode(),
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=180) as resp:
+                return json.loads(resp.read().decode())
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf-8", errors="replace")[:400]
+            raise RuntimeError(f"SpaceXAI {e.code}: {detail}") from e
+
+    body = {
+        "model": XAI_MODEL,
+        "temperature": 0.2,
+        "search_parameters": {"mode": "off"},
+        "messages": messages,
+    }
     try:
-        with urllib.request.urlopen(req, timeout=180) as resp:
-            payload = json.loads(resp.read().decode())
-    except urllib.error.HTTPError as e:
-        detail = e.read().decode("utf-8", errors="replace")[:400]
-        raise RuntimeError(f"SpaceXAI {e.code}: {detail}") from e
+        payload = post(body)
+    except RuntimeError as e:
+        if "search_parameters" not in str(e).lower():
+            raise
+        body.pop("search_parameters", None)
+        payload = post(body)
     content = payload["choices"][0]["message"]["content"]
     return extract_json(content)
 
@@ -163,45 +306,125 @@ class Handler(SimpleHTTPRequestHandler):
         self.wfile.write(raw)
 
     def do_GET(self) -> None:
-        if self.path.split("?", 1)[0] == "/api/health":
-            key = os.environ.get("XAI_API_KEY", "")
-            self._json(200, {"ok": True, "has_key": bool(key), "provider": "spacexai", "model": XAI_MODEL})
+        path = self.path.split("?", 1)[0]
+        name = Path(path).name
+        if name in HIDDEN_FILES or path.startswith("/.git"):
+            self._json(404, {"error": "not found"})
             return
-        if self.path in ("/", "/index.html"):
+        if path.startswith("/api/job/"):
+            job_id = path.rsplit("/", 1)[-1]
+            with _jobs_lock:
+                job = _jobs.get(job_id)
+            if not job:
+                self._json(404, {"error": "Unknown job."})
+                return
+            out = {"status": job["status"]}
+            if job["status"] == "done":
+                out["poem"] = job["poem"]
+            if job["status"] == "error":
+                out["error"] = job.get("error") or "Failed."
+            self._json(200, out)
+            return
+        if path == "/api/health":
+            key = os.environ.get("XAI_API_KEY", "")
+            self._json(
+                200,
+                {
+                    "ok": True,
+                    "has_key": bool(key),
+                    "provider": "spacexai",
+                    "model": XAI_MODEL,
+                    "max_per_hour": MAX_PER_HOUR,
+                },
+            )
+            return
+        if path in ("/", "/index.html"):
             self.path = "/index.html"
         super().do_GET()
 
-    def do_POST(self) -> None:
-        if self.path.split("?", 1)[0] != "/api/process":
-            self._json(404, {"error": "not found"})
-            return
+    def _read_json_body(self) -> dict:
         length = int(self.headers.get("Content-Length") or 0)
         if length > 2_000_000:
-            self._json(413, {"error": "Request too large."})
+            raise ValueError("Request too large.")
+        try:
+            return json.loads(self.rfile.read(length) or b"{}")
+        except json.JSONDecodeError as e:
+            raise ValueError("Invalid JSON.") from e
+
+    def do_POST(self) -> None:
+        path = self.path.split("?", 1)[0]
+        if path not in ("/api/process", "/api/fetch"):
+            self._json(404, {"error": "not found"})
+            return
+        ip = client_ip(self)
+        if path == "/api/process" and not rate_ok(ip):
+            self._json(
+                429,
+                {
+                    "error": f"This host allows {MAX_PER_HOUR} readers per hour per visitor. Try later."
+                },
+            )
             return
         try:
-            body = json.loads(self.rfile.read(length) or b"{}")
-        except json.JSONDecodeError:
-            self._json(400, {"error": "Invalid JSON."})
+            body = self._read_json_body()
+        except ValueError as e:
+            code = 413 if "large" in str(e).lower() else 400
+            self._json(code, {"error": str(e)})
             return
         try:
+            if path == "/api/fetch":
+                url = (body.get("url") or "").strip()
+                if not url:
+                    raise ValueError("Give a URL.")
+                text = fetch_url(url)
+                text, truncated = approx_truncate(text)
+                if not text:
+                    raise ValueError("Could not extract readable text from that URL. Paste the page text instead.")
+                print(f"fetch: {len(text)} chars from {url}", flush=True)
+                self._json(200, {"text": text, "truncated": truncated})
+                return
+
             text = (body.get("text") or "").strip()
             url = (body.get("url") or "").strip()
             if url and not text:
                 text = fetch_url(url)
+            elif not text and not url:
+                raise ValueError("Paste text, drop a file, or give a URL.")
             text, truncated = approx_truncate(text)
             if not text:
-                raise ValueError("Paste text, drop a file, or give a URL.")
-            api_key = (body.get("api_key") or os.environ.get("XAI_API_KEY") or "").strip()
+                raise ValueError(
+                    "Nothing to read from that source. If you used a URL, paste the page text instead."
+                )
+            api_key = (os.environ.get("XAI_API_KEY") or body.get("api_key") or "").strip()
             if not api_key:
-                raise ValueError("Missing XAI_API_KEY. Set it in the environment or paste a SpaceXAI key in the page.")
+                raise ValueError("Missing XAI_API_KEY. Set it on the host or paste a SpaceXAI key in the page.")
             target_code = body.get("target_lang") or "en"
             target_label = body.get("target_lang_label") or "English"
-            poem = call_xai(text, target_label, target_code, api_key)
-            poem["target_lang"] = target_code
-            poem["target_lang_label"] = target_label
-            poem["truncated"] = truncated
-            self._json(200, poem)
+            if not _job_lock.acquire(blocking=False):
+                self._json(429, {"error": "Factory is already building a reader. Try again in a minute."})
+                return
+            job_id = uuid.uuid4().hex[:12]
+            with _jobs_lock:
+                _jobs[job_id] = {"status": "working", "t0": time.time()}
+
+            def run() -> None:
+                try:
+                    print(f"process: {len(text)} chars → {XAI_MODEL}", flush=True)
+                    poem = call_xai(text, target_label, target_code, api_key)
+                    poem["target_lang"] = target_code
+                    poem["target_lang_label"] = target_label
+                    poem["truncated"] = truncated
+                    print(f"ready: {len(poem.get('stanzas') or [])} stanzas", flush=True)
+                    with _jobs_lock:
+                        _jobs[job_id] = {"status": "done", "poem": poem}
+                except Exception as exc:
+                    with _jobs_lock:
+                        _jobs[job_id] = {"status": "error", "error": str(exc)}
+                finally:
+                    _job_lock.release()
+
+            threading.Thread(target=run, daemon=True).start()
+            self._json(202, {"job_id": job_id, "status": "working"})
         except Exception as e:
             self._json(400, {"error": str(e)})
 
@@ -209,8 +432,8 @@ class Handler(SimpleHTTPRequestHandler):
 def main() -> None:
     load_dotenv()
     os.chdir(ROOT)
-    server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
-    print(f"Poem factory http://127.0.0.1:{PORT}/", flush=True)
+    server = ThreadingHTTPServer((HOST, PORT), Handler)
+    print(f"Poem factory http://{HOST}:{PORT}/", flush=True)
     if not os.environ.get("XAI_API_KEY"):
         print("No XAI_API_KEY in env — paste a SpaceXAI key in the page.", flush=True)
     try:
